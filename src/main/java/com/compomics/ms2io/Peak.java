@@ -4,18 +4,18 @@ package com.compomics.ms2io;
  *
  * @author Genet
  */
-public class Peak  {
+public class Peak implements Comparable<Peak>  {
     
     
     /**
      * m/z value of the peak
      */
-    public double mz;
+    private double mz;
    
     /**
      * intensity of the peak.
      */
-    public double intensity;
+    private double intensity;
 
     /**
      * class constructor
@@ -75,6 +75,12 @@ public class Peak  {
      */
     public void setIntensity(double intensity) {
         this.intensity = intensity;
+    }
+
+    @Override
+    public int compareTo(Peak t) {
+        
+        return Double.compare(this.mz, t.mz);
     }
 
  

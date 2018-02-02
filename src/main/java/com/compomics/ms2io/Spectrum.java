@@ -49,10 +49,28 @@ public class Spectrum {
     private String scanNumber="0";
     
     /**
-     * number of peaks in the spectrum. Only msp file format
+     * number of peaks in the spectrum.
      */
     private int numPeaks;
     
+    /**
+     * minimum m/z value of the spectrum
+     */
+    private double minMZ;
+    
+    /**
+     * maximum m/z value of the spectrum
+     */
+    private double maxMZ;
+      /**
+     * minimum intensity value of the spectrum
+     */
+    private double minIntensity;
+    
+    /**
+     * maximum intensity value of the spectrum
+     */
+    private double maxIntensity;
     
     /**
      * Getter for the scan number.
@@ -142,6 +160,75 @@ public class Spectrum {
         return peakDouble;
     }
     
+    /**
+     * returns minimum Intensity
+     * @return 
+     */
+    public double getMinIntensity(){
+        double[][] p=this.getPeakListDouble();
+        int len=this.peakList.size();
+        double min=Double.MAX_VALUE;
+        for(int a=0;a<len;a++){
+            if(min>p[1][a]){
+                min=p[1][a];
+            }
+        }
+        
+        return min;
+    }
+    
+    /**
+     * returns the maximum Intensity
+     * @return 
+     */
+     public double getMaxIntensity(){
+        double[][] p=this.getPeakListDouble();
+        int len=this.peakList.size();
+        double max=Double.MIN_VALUE;
+        for(int a=0;a<len;a++){
+            if(max < p[1][a]){
+                max=p[1][a];
+            }
+        }
+        
+        return max;
+    }
+    
+    
+    
+    /**
+     * returns minimum mass to charge ratio
+     * @return 
+     */
+    public double getMinMZ(){
+        double[][] p=this.getPeakListDouble();
+        int len=this.peakList.size();
+        double min=Double.MAX_VALUE;
+        for(int a=0;a<len;a++){
+            if(min>p[0][a]){
+                min=p[0][a];
+            }
+        }
+        
+        return min;
+    }
+    
+    /**
+     * returns the maximum mass over charge ratio
+     * @return 
+     */
+     public double getMaxMZ(){
+        double[][] p=this.getPeakListDouble();
+        int len=this.peakList.size();
+        double max=Double.MIN_VALUE;
+        for(int a=0;a<len;a++){
+            if(max < p[0][a]){
+                max=p[0][a];
+            }
+        }
+        
+        return max;
+    }
     
      public void setMW(double mw){
         this.mw=mw;
@@ -156,12 +243,12 @@ public class Spectrum {
     }
     
     public int getNumPeaks(){
+        if(Double.compare(this.numPeaks, 0.0) <= 0){
+            this.numPeaks=this.peakList.size();
+        }
         return this.numPeaks;
     }
     
-
-    
-
     public void setPCMass(double pcm){
         this.pcMass=pcm;
     }

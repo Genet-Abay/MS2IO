@@ -25,15 +25,15 @@ public class App
 
         if (indxfile.exists()) {
 
-            SpectrumReader rd = new MspReader(specfile, indxfile, pcm, error);
-            spectra = rd.Read();
+            SpectrumReader rd = new MspReader(specfile, indxfile);
+            spectra = rd.readPart(pcm, error);
 
         } else {
 
             Indexer gi = new Indexer(specfile);
             List<IndexKey> indxList = gi.generate();
-            SpectrumReader rd = new MspReader(specfile, indxList, pcm, error);
-            spectra = rd.Read();
+            SpectrumReader rd = new MspReader(specfile, indxList);
+            spectra = rd.readPart(pcm, error);
 
         }
 
