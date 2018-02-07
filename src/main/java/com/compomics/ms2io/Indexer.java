@@ -1,13 +1,23 @@
 package com.compomics.ms2io;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.Closeable;
+import java.io.EOFException;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,6 +27,15 @@ public class Indexer implements Closeable, AutoCloseable {
 
     private BufferedRAF braf;
     private final File file;
+    List<IndexKey> index;
+    
+    /**
+     * constructor
+     */
+    public Indexer(){
+        index=new ArrayList<>();
+        this.file=null;
+    }
 
     /**
      * constructor to generate the index
@@ -27,8 +46,10 @@ public class Indexer implements Closeable, AutoCloseable {
     public Indexer(File file) throws IOException {
         this.braf = new BufferedRAF(file, "r");
         this.file = file;
+        index=new ArrayList<>();
     }
 
+     
     @Override
     public void close() throws IOException {
         braf.close();      
@@ -43,28 +64,17 @@ public class Indexer implements Closeable, AutoCloseable {
      */
     public List<IndexKey>  generate() throws IOException {
 
-        List<IndexKey> index = new ArrayList<>();
+        
         if (this.file.getName().endsWith("mgf")) {
-            index = mgfIndexer();
+            mgfIndexer();
 
         } else if (this.file.getName().endsWith("msp")) {
-           index = mspIndexer();
+           mspIndexer();
         } else {
             //report file type error
         }
 
-        String indxfilename = file.getName().substring(0, file.getName().lastIndexOf("."));
-        File indxFile = new File(file.getParent(), indxfilename + ".idx");
-
-        BufferedWriter bw = new BufferedWriter(new FileWriter(indxFile));
-        for (IndexKey inx : index) {
-            String temp = inx.getCombinedIndex();
-            bw.write(temp);
-            bw.newLine();
-
-        }
-        bw.close();
-        
+            
         return index;
 
     }
@@ -74,9 +84,9 @@ public class Indexer implements Closeable, AutoCloseable {
      *
      * @throws IOException
      */
-    private List<IndexKey> mgfIndexer() throws IOException {
-
-        List<IndexKey> index=new ArrayList<>();
+    private void mgfIndexer() throws IOException {
+        
+        index = new ArrayList<>();
         try {
             
             braf = new BufferedRAF(file, "r");
@@ -126,14 +136,14 @@ public class Indexer implements Closeable, AutoCloseable {
 
             }
 
-            Collections.sort(index);
+           // Collections.sort(index);
         } finally {
             if (braf != null) {
                 braf.close();
             }
         }
 
-        return index;
+       
     }
 
     /**
@@ -141,9 +151,9 @@ public class Indexer implements Closeable, AutoCloseable {
      *
      * @throws IOException
      */
-    private List<IndexKey> mspIndexer() throws IOException {
+    private void mspIndexer() throws IOException {
 
-        List<IndexKey> index=new ArrayList<>();
+        index = new ArrayList<>();
         try {
             braf = new BufferedRAF(file, "r");
             braf.seek(0);
@@ -188,14 +198,66 @@ public class Indexer implements Closeable, AutoCloseable {
 
             }
 
-            Collections.sort(index);
+           // Collections.sort(index);
         } finally {
             if (braf != null) {
                 braf.close();
             }
         }
 
-        return index;
     }
 
+    public void saveIndex2File(File file)
+    {
+        FileOutputStream fout = null;
+        try {
+            String indxfilename = file.getName().substring(0, file.getName().lastIndexOf("."));
+            File indxFile = new File(file.getParent(), indxfilename + ".idx");
+            fout = new FileOutputStream(indxFile);
+            BufferedOutputStream bos=new BufferedOutputStream(fout);
+            ObjectOutputStream opStream = new ObjectOutputStream(bos);
+            // BufferedWriter bw = new BufferedWriter(new FileWriter(indxFile));
+            for (IndexKey inx : index) {
+                //String temp = inx.getCombinedIndex();
+                opStream.writeObject(inx);
+                //opStream.write('\n');
+
+            }   opStream.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Indexer.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Indexer.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                fout.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Indexer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    /**
+     * Returns list of spectrum index keys read from given file
+     *
+     * @param indxfile file contains the index of spectra which contains
+     * positions of spectrum on the actual file precursor mass and scan number
+     * @return array of indexes
+     * @throws IOException
+     * @throws java.lang.ClassNotFoundException
+     */
+    public List<IndexKey> readFromFile(File indxfile) throws IOException, ClassNotFoundException {
+        List<IndexKey> indxKey = new ArrayList<>();
+        try {
+            FileInputStream fin = new FileInputStream(indxfile);
+            BufferedInputStream bis = new BufferedInputStream(fin);
+            ObjectInputStream ois = new ObjectInputStream(bis);
+            IndexKey indObject = (IndexKey) ois.readObject();
+            while (true) {
+                indxKey.add(indObject);
+                indObject = (IndexKey) ois.readObject();
+            }
+        } catch (EOFException e) {
+            return indxKey;
+        }
+    }
 }

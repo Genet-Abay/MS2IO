@@ -5,12 +5,17 @@
  */
 package com.compomics.ms2io;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.EOFException;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -43,49 +48,18 @@ public abstract class SpectrumReader {
      * @return
      */
     public abstract ArrayList<Spectrum> readPart(String title);
-
+    
     /**
-     * positions of the spectra to be read
-     *
-     * @param indxfile file contains the index of spectra which contains
-     * positions of spectrum on the actual file precursor mass and scan number
-     * @param pm precursor mass to be used for spectrum selection
-     * @param error mass error to include
-     * @return list of selected spectra positions
-     * @throws IOException
+     * Reads spectrum at the specified positions
+     * 
+     * 
+     * @param position positions of the spectrum to be read
+     * @return return spectrum at the specified position
      */
-    protected List<Long> positionsToberead(File indxfile, double pm, double error) throws IOException {
+    public abstract Spectrum readAt(Long position);
+        
+   
 
-        List<Long> pos = new ArrayList<>();
-        BufferedReader br = new BufferedReader(new FileReader(indxfile));
-
-        double lowerBound = pm - error;
-        double upperBound = pm + error;
-
-        String line = br.readLine();
-        while (line != null) {
-            String[] temp = line.split(";");
-            int tempLen = temp.length;
-            if (tempLen == 4) {
-                double pmass = Double.parseDouble(temp[3]);
-                if (lowerBound <= pmass && pmass <= upperBound) {
-                    Long p = Long.parseLong(temp[0]);
-                    pos.add(p);
-                }
-                //index file recoreded in pm increasing order, so we can stop checking out of bounds
-                if (pm > upperBound) {
-                    break;
-                }
-            } else {
-                //report error on iindex file
-            }
-
-            line = br.readLine();
-
-        }
-
-        return pos;
-    }
 
     /**
      * positions of the spectra to be read from given list of index
@@ -104,11 +78,13 @@ public abstract class SpectrumReader {
         double upperBound = pm + error;
 
         for (IndexKey k : indKey) {
-            if (lowerBound <= k.getPM() && k.getPM() <= upperBound) {
+            double mass=k.getPM();
+           
+            if (lowerBound <= mass && mass <= upperBound) {
                 pos.add(k.getPos());
 
                 //index file recoreded in pm increasing order, so we can stop checking out of bounds
-                if (k.getPM() > upperBound) {
+                if (mass > upperBound) {
                     break;
                 }
             }
@@ -117,41 +93,7 @@ public abstract class SpectrumReader {
         return pos;
     }
 
-    /**
-     * positions of the spectra to be read
-     *
-     * @param indxfile file contains the index of spectra which contains
-     * positions of spectrum on the actual file precursor mass and scan number
-     * @param title spectrum title to search for reading
-     * @return list of selected spectra positions
-     * @throws IOException
-     */
-    protected List<Long> positionsToberead(File indxfile, String title) throws IOException {
-
-        List<Long> pos = new ArrayList<>();
-        BufferedReader br = new BufferedReader(new FileReader(indxfile));
-
-        String line = br.readLine();
-        while (line != null) {
-            String[] temp = line.split(";");
-            int tempLen = temp.length;
-            if (tempLen == 4) {
-                String t = temp[1];
-                if (t.equals(title)) {
-                    Long p = Long.parseLong(temp[0]);
-                    pos.add(p);
-                }
-
-            } else {
-                //report error on iindex file
-            }
-
-            line = br.readLine();
-
-        }
-
-        return pos;
-    }
+ 
 
     /**
      * positions of the spectra to be read from given list of index

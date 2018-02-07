@@ -62,21 +62,28 @@ public class MgfReader extends SpectrumReader {
     public ArrayList<Spectrum> readAll() {
         ArrayList<Spectrum> spectra = new ArrayList<>();
         try {
-            BufferedReader br = new BufferedReader(new FileReader(this.spectraFile));
+            //BufferedReader br = new BufferedReader(new FileReader(this.spectraFile));
 
+            BufferedRAF braf = new BufferedRAF(this.spectraFile, "r");
+            IndexKey k=new IndexKey();
             Peak pk;
             ArrayList<Peak> pkList = new ArrayList<>();
             Spectrum spec = new Spectrum();
 
-            String line = br.readLine();
+            
+            String line = braf.readLine();
             while (line != null) {
 
                 if (line.endsWith("\r")) {
                     line = line.replace("\r", "");
                 }
+                if (line.equals("")) {
+                    //throw new Error("Bad spectrum format");
 
-                if (Character.isDigit(line.charAt(0))) {
-                    String[] p = line.split(" ");
+                } else if (Character.isDigit(line.charAt(0))) {
+                    String fline = line.replaceAll("\\s+", " ");
+                    String[] p = fline.split(" ");
+                    //String[] p = line.split(" ");
                     double pcm = Double.parseDouble(p[0]);
                     double pci = Double.parseDouble(p[1]);
 
@@ -86,6 +93,7 @@ public class MgfReader extends SpectrumReader {
                 } else if (line.startsWith("BEGIN")) {
                     pkList = new ArrayList<>();
                     spec = new Spectrum();
+                    k.setPos(braf.getFilePointer());
                 } else if (line.startsWith("TITLE")) {
                     String[] temp = line.split(" ");
                     int tempLen = temp.length;
@@ -107,17 +115,29 @@ public class MgfReader extends SpectrumReader {
                     spec.setPCMass(Double.parseDouble(temp[0].substring(temp[0].indexOf("=") + 1)));
                     spec.setPCIntesity(Double.parseDouble(temp[1]));
 
+                } else if (line.startsWith("RTINSECONDS")) {
+                    String temp = line.substring(line.indexOf("=") + 1);
+                    spec.setRtTime(Double.parseDouble(temp));
+
                 } else if (line.startsWith("CHARGE")) {
 
                     spec.setCharge(line.substring(line.indexOf("=") + 1));
 
                 } else if (line.endsWith("END IONS")) {
+                    k.setName(spec.getTitle());
+                    k.setPM(spec.getPCMass());
+                    k.setScanNum(spec.getScanNumber());
+                    spec.setIndex(k);
                     spec.setPeakList(pkList);
                     spectra.add(spec);
+                    k.setName(spec.getTitle());
+                    k.setPM(spec.getPCMass());
+                    k.setScanNum(spec.getScanNumber());
+                    
 
                 }
 
-                line = br.readLine();
+                line = braf.readLine();
 
             }
 
@@ -128,13 +148,12 @@ public class MgfReader extends SpectrumReader {
         return spectra;
     }
 
-    
     /**
      * Returns list of selected spectrum based on precursor mass with specified
      * mass error
      *
      * @return list of spectrum
-     
+     *
      */
     @Override
     public ArrayList<Spectrum> readPart(double precMass, double error) {
@@ -142,18 +161,23 @@ public class MgfReader extends SpectrumReader {
         ArrayList<Spectrum> selectedSpectra = new ArrayList<>();
         List<Long> pos;
 
+        Indexer indxer = new Indexer();
         try {
-            if (this.IKey != null) {
-                pos = positionsToberead(this.IKey, precMass, error);
-            } else if (this.indexFile != null) {
-                pos = positionsToberead(this.indexFile, precMass, error);
-            } else {
-                //Log that there is no spectrum index
-                return null;
+            if (this.IKey == null) {
+                if (this.indexFile != null) {
+                    this.IKey = indxer.readFromFile(indexFile);
+                } else {
+                    //Index key not found, it should be read from file or should be provided
+                }
+            }
+            pos = positionsToberead(this.IKey, precMass, error);
+
+            int len = pos.size();
+            for (int a = 0; a < len; a++) {
+                selectedSpectra.add(readAt(pos.get(a)));
             }
 
-            filter(pos, selectedSpectra);
-        } catch (IOException ex) {
+        } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(MgfReader.class.getName()).log(Level.SEVERE, null, ex);
         }
         return selectedSpectra;
@@ -164,61 +188,74 @@ public class MgfReader extends SpectrumReader {
      * Returns list of selected spectrum based on spectrum title
      *
      * @return list of spectrum
-     
+     *
      */
     @Override
     public ArrayList<Spectrum> readPart(String title) {
 
         ArrayList<Spectrum> selectedSpectra = new ArrayList<>();
         List<Long> pos;
+        Indexer indxer = new Indexer();
 
         try {
-            if (this.IKey != null) {
-
-                pos = positionsToberead(this.IKey, title);
-
-            } else if (this.indexFile != null) {
-                pos = positionsToberead(this.indexFile, title);
-            } else {
-                //Log that there is no spectrum index
-                return null;
+            if (this.IKey == null) {
+                if (this.indexFile != null) {
+                    this.IKey = indxer.readFromFile(indexFile);
+                } else {
+                    //Index key not found, it should be read from file or should be provided
+                }
             }
-
-            filter(pos, selectedSpectra);
-        } catch (IOException ex) {
+            pos = positionsToberead(this.IKey, title);
+            int len = pos.size();
+            for (int a = 0; a < len; a++) {
+                selectedSpectra.add(readAt(pos.get(a)));
+            }
+        } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(MgfReader.class.getName()).log(Level.SEVERE, null, ex);
         }
         return selectedSpectra;
 
     }
 
-    private void filter(List<Long> pos, ArrayList<Spectrum> selectedSpectra) throws IOException {
-        Spectrum spec;
-        int len = pos.size();
-        String line;
-        Peak pk;
-        ArrayList<Peak> pkList;
+ 
+    /**
+     * Reads spectrum at the specified position
+     * @param position position to be read
+     * @return spectrum at location position
+     */
 
-        BufferedRAF braf = new BufferedRAF(this.spectraFile, "r");
-        for (int a = 0; a < len; a++) {
-            spec = new Spectrum();
-            braf.seek(pos.get(a));
+    @Override
+    public Spectrum readAt(Long position) {
+        
+        Spectrum spec = new Spectrum();
+        try {
+            
+            ArrayList<Peak> pkList;
+            String line;
+            Peak pk;
+            
+            BufferedRAF braf = new BufferedRAF(this.spectraFile, "r");
+            IndexKey k=new IndexKey();
+            
+            braf.seek(position);
             line = braf.readLine();
-
+            
             pkList = new ArrayList<>();
-
+            
             while (line != null) {
-
+                
                 //if line is starts with digit it assumes as a peak
                 if (Character.isDigit(line.charAt(0))) {
                     String[] p = line.split(" ");
                     double pcm = Double.parseDouble(p[0]);
                     double pci = Double.parseDouble(p[1]);
-
+                    
                     pk = new Peak(pcm, pci);
                     pkList.add(pk);
-
+                    
                 } else if (line.startsWith("BEGIN")) {
+                    k=new IndexKey();
+                    k.setPos(braf.getFilePointer());
                 } else if (line.startsWith("TITLE")) {
                     String[] temp = line.split(" ");
                     int tempLen = temp.length;
@@ -234,28 +271,33 @@ public class MgfReader extends SpectrumReader {
                             spec.setScanNumber(ss);
                         }
                     }
-
+                    
                 } else if (line.startsWith("PEPMASS")) {
                     String[] temp = line.split(" ");
                     spec.setPCMass(Double.parseDouble(temp[0].substring(temp[0].indexOf("=") + 1)));
                     spec.setPCIntesity(Double.parseDouble(temp[1]));
-
+                    
                 } else if (line.startsWith("CHARGE")) {
-
+                    
                     spec.setCharge(line.substring(line.indexOf("=") + 1));
-
+                    
                 } else if (line.endsWith("END IONS")) {
+                    k.setName(spec.getTitle());
+                    k.setPM(spec.getPCMass());
+                    k.setScanNum(spec.getScanNumber());
+                    spec.setIndex(k);
                     spec.setPeakList(pkList);
                     break;
                 }
-
+                
                 line = braf.readLine();
-
+                
             }
-            selectedSpectra.add(spec);
-
+        } catch (IOException ex) {
+            Logger.getLogger(MgfReader.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
+        return spec;
     }
 
 }

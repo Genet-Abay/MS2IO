@@ -8,6 +8,11 @@ import java.util.ArrayList;
  */
 public class Spectrum {
     
+    /**
+     * Index of this spectrum
+     */
+    private IndexKey indx;
+    
      /**
      * Spectrum title.
      */
@@ -17,6 +22,11 @@ public class Spectrum {
      * Molecular weight of the peptide. Only msp file format
      */
     private double mw;
+    
+    /**
+     * Retention time
+     */
+    private double rtTime=0.0;
     
     /**
      * Spectrum title.
@@ -142,6 +152,63 @@ public class Spectrum {
         return peakList;
     }
     
+    
+    public void setMW(double mw){
+        this.mw=mw;
+    }
+    
+    public double getMW(){
+        return this.mw;
+       
+    }
+    
+     public double getRtTime(){
+        return this.rtTime;
+        
+    }
+     
+    public void setRtTime(double rt){
+        this.rtTime=rt;
+    }
+    
+      public void setNumPeaks(int numPeaks){
+        this.numPeaks=numPeaks;
+    }
+    
+    public int getNumPeaks(){
+        if(Double.compare(this.numPeaks, 0.0) <= 0){
+            this.numPeaks=this.peakList.size();
+        }
+        return this.numPeaks;
+    }
+    
+    public void setPCMass(double pcm){
+        this.pcMass=pcm;
+    }
+    
+    public double getPCMass(){
+        return this.pcMass;
+    }
+    
+    public void setPCIntesity(double pcI){
+        this.pcIntensity=pcI;
+        
+    }
+    
+    public double getPCIntensity(){
+        return this.pcIntensity;
+    }
+    
+    public void setCharge(String ch){
+        this.charge=ch;
+        
+    }
+    
+    public String getCharge(){
+        return this.charge;
+    }
+    
+    
      /**
      * Returns the peak list as double.The first represents mz and the second for intensity
      *
@@ -159,6 +226,42 @@ public class Spectrum {
         }
         return peakDouble;
     }
+    
+     /**
+     * Returns the MZ values as double array.
+     *
+     * @return m/z as double
+     */
+    public double[] getMZDouble() {
+        
+        int len=this.peakList.size();
+        int c=0;
+        double[] mzDouble=new double[len];
+        for(Peak p : this.peakList){
+            mzDouble[c++]=p.getMz();            
+         
+        }
+        return mzDouble;
+    }
+    
+     /**
+     * Returns the Intensity values as double array.
+     *
+     * @return intensity as double array
+     */
+    public double[] getIntensityDouble() {
+        
+        int len=this.peakList.size();
+        int c=0;
+        double[] intensityDouble=new double[len];
+        for(Peak p : this.peakList){
+            intensityDouble[c++]=p.getIntensity();            
+         
+        }
+        return intensityDouble;
+    }
+    
+    
     
     /**
      * returns minimum Intensity
@@ -228,54 +331,21 @@ public class Spectrum {
         }
         
         return max;
-    }
-    
-     public void setMW(double mw){
-        this.mw=mw;
-    }
-    
-    public double getMW(){
-        return this.mw;
-    }
-    
-      public void setNumPeaks(int numPeaks){
-        this.numPeaks=numPeaks;
-    }
-    
-    public int getNumPeaks(){
-        if(Double.compare(this.numPeaks, 0.0) <= 0){
-            this.numPeaks=this.peakList.size();
-        }
-        return this.numPeaks;
-    }
-    
-    public void setPCMass(double pcm){
-        this.pcMass=pcm;
-    }
-    
-    public double getPCMass(){
-        return this.pcMass;
-    }
-    
-    public void setPCIntesity(double pcI){
-        this.pcIntensity=pcI;
-        
-    }
-    
-    public double getPCIntensity(){
-        return this.pcIntensity;
-    }
-    
-    public void setCharge(String ch){
-        this.charge=ch;
-        
-    }
-    
-    public String getCharge(){
-        return this.charge;
-    }
+    }    
      
+     /**
+      * set Index of the spectrum
+     * @param k the key to be assigned
+      */
+     public void setIndex(IndexKey k){
+         this.indx=k;
+     }
      
-
-   
+     /**
+      * returns index of the spectrum
+     * @return index key
+      */
+     public IndexKey getIndex(){
+         return this.indx;
+     }
 }

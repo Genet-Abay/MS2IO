@@ -1,15 +1,20 @@
 package com.compomics.ms2io;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Genet
  */
-public class IndexKey implements Comparable<IndexKey> {
+public class IndexKey implements Comparable<IndexKey>, Serializable {
+    
+    private static final long SerialversionUID = 129348938L;
+    
 
     /**
      * memory position
      */
-    private Long pos;
+    private long pos;
 
     /**
      * primary index : name of the spectrum
