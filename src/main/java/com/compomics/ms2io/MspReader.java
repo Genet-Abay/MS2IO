@@ -79,7 +79,7 @@ public class MspReader extends SpectrumReader {
                 }
 
                 if (line.equals("")) {
-                    k.setName(spec.getTitle());
+                    k.setTitle(spec.getTitle());
                     k.setPM(spec.getPCMass());
                     k.setScanNum(spec.getScanNumber());
                     spec.setIndex(k);
@@ -229,7 +229,7 @@ public class MspReader extends SpectrumReader {
             while (line != null) {
 
                 if (line.equals("")) {
-                    k.setName(spec.getTitle());
+                    k.setTitle(spec.getTitle());
                     k.setPM(spec.getPCMass());
                     k.setScanNum(spec.getScanNumber());
                     spec.setIndex(k);
@@ -248,6 +248,9 @@ public class MspReader extends SpectrumReader {
                     k=new IndexKey();
                     k.setPos(braf.getFilePointer());
                     spec.setTitle(line.substring(line.indexOf(":") + 2));
+                    
+                    String ch = line.substring(line.indexOf('/') + 1);
+                    spec.setCharge(ch);
 
                 } else if (line.startsWith("MW")) {
                     spec.setMW(Double.parseDouble(line.substring(line.indexOf(":") + 2)));

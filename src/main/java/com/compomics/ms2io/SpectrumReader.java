@@ -102,7 +102,7 @@ public abstract class SpectrumReader {
 
         List<Long> pos = new ArrayList<>();
 
-        indKey.stream().filter((k) -> (k.getName().equals(title))).forEach((k) -> {
+        indKey.stream().filter((k) -> (k.getTitle().equals(title))).forEach((k) -> {
             pos.add(k.getPos());
         });
 

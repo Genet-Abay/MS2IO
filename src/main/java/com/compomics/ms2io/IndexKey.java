@@ -19,7 +19,7 @@ public class IndexKey implements Comparable<IndexKey>, Serializable {
     /**
      * primary index : name of the spectrum
      */
-    private String name;
+    private String title;
     /**
      * secondary index: precursor mass
      */
@@ -44,8 +44,8 @@ public class IndexKey implements Comparable<IndexKey>, Serializable {
      * returns name of the spectrum to be indexed
      * @return name of the spectrum
      */
-    public String getName() {
-        return this.name;
+    public String getTitle() {
+        return this.title;
     }
     
     /**
@@ -75,10 +75,10 @@ public class IndexKey implements Comparable<IndexKey>, Serializable {
 
     /**
      * Set the name of the spectrum
-     * @param name 
+     * @param title 
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
     
     /**
@@ -103,7 +103,7 @@ public class IndexKey implements Comparable<IndexKey>, Serializable {
      */
     public String getCombinedIndex(){
         
-        return (Long.toString(this.pos)+";" + this.name+ ";" + this.scanNum + ";" + Double.toString(this.pm));
+        return (Long.toString(this.pos)+";" + this.title+ ";" + this.scanNum + ";" + Double.toString(this.pm));
     }
 
     /**

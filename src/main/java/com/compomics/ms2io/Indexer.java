@@ -110,7 +110,7 @@ public class Indexer implements Closeable, AutoCloseable {
                         for (int a = 0; a < tempLen; a++) {
                             if (temp[a].startsWith("TITLE")) {
                                 String name = temp[a].substring(temp[a].indexOf("=") + 1);
-                                indexObj.setName(name);
+                                indexObj.setTitle(name);
                             } else if (temp[a].startsWith("scan")) {
                                 String ss = temp[a].replaceAll("[^0-9?!\\.]", "");
                                 indexObj.setScanNum(ss);
@@ -168,7 +168,7 @@ public class Indexer implements Closeable, AutoCloseable {
 
                     if (line.startsWith("Name")) {
                         indexObj.setPos(p);
-                        indexObj.setName(line.substring(line.indexOf(":") + 2));
+                        indexObj.setTitle(line.substring(line.indexOf(":") + 2));
                         header = true;
                     }
                     else if (line.startsWith("Comment")) {

@@ -122,13 +122,13 @@ public class MgfReader extends SpectrumReader {
                     spec.setCharge(line.substring(line.indexOf("=") + 1));
 
                 } else if (line.endsWith("END IONS")) {
-                    k.setName(spec.getTitle());
+                    k.setTitle(spec.getTitle());
                     k.setPM(spec.getPCMass());
                     k.setScanNum(spec.getScanNumber());
                     spec.setIndex(k);
                     spec.setPeakList(pkList);
                     spectra.add(spec);
-                    k.setName(spec.getTitle());
+                    k.setTitle(spec.getTitle());
                     k.setPM(spec.getPCMass());
                     k.setScanNum(spec.getScanNumber());
                     
@@ -279,7 +279,7 @@ public class MgfReader extends SpectrumReader {
                     spec.setCharge(line.substring(line.indexOf("=") + 1));
                     
                 } else if (line.endsWith("END IONS")) {
-                    k.setName(spec.getTitle());
+                    k.setTitle(spec.getTitle());
                     k.setPM(spec.getPCMass());
                     k.setScanNum(spec.getScanNumber());
                     spec.setIndex(k);
