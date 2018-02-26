@@ -1,8 +1,6 @@
 package com.compomics.ms2io;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -102,8 +100,8 @@ public class MgfReader extends SpectrumReader {
                             String title = temp[b].substring(temp[b].indexOf("=") + 1);
                             spec.setTitle(title);
                         } else if (temp[b].startsWith("File")) {
-                            String name = temp[b].substring(temp[b].indexOf("=") + 1);
-                            spec.setTitle(name);
+                            String name = temp[b].substring(temp[b].indexOf(":") + 2, temp[b].indexOf(",") -1);
+                            spec.setFileName(name);
                         } else if (temp[b].startsWith("scan")) {
                             String ss = temp[b].replaceAll("[^0-9?!\\.]", "");
                             spec.setScanNumber(ss);
@@ -159,9 +157,8 @@ public class MgfReader extends SpectrumReader {
     public ArrayList<Spectrum> readPart(double precMass, double error) {
 
         ArrayList<Spectrum> selectedSpectra = new ArrayList<>();
-        List<Long> pos;
-
         Indexer indxer = new Indexer();
+        
         try {
             if (this.IKey == null) {
                 if (this.indexFile != null) {
@@ -170,7 +167,7 @@ public class MgfReader extends SpectrumReader {
                     //Index key not found, it should be read from file or should be provided
                 }
             }
-            pos = positionsToberead(this.IKey, precMass, error);
+            List<Long>  pos = positionsToberead(this.IKey, precMass, error);
 
             int len = pos.size();
             for (int a = 0; a < len; a++) {
@@ -264,8 +261,8 @@ public class MgfReader extends SpectrumReader {
                             String title = temp[b].substring(temp[b].indexOf("=") + 1);
                             spec.setTitle(title);
                         } else if (temp[b].startsWith("File")) {
-                            String name = temp[b].substring(temp[b].indexOf("=") + 1);
-                            spec.setTitle(name);
+                            String name = temp[b].substring(temp[b].indexOf(":") + 2, temp[b].indexOf(",") - 1);
+                            spec.setFileName(name);
                         } else if (temp[b].startsWith("scan")) {
                             String ss = temp[b].replaceAll("[^0-9?!\\.]", "");
                             spec.setScanNumber(ss);
