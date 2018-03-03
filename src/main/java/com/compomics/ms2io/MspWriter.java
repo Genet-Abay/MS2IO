@@ -13,12 +13,21 @@ import java.util.logging.Logger;
  *
  * @author Genet
  */
-public class MspWriter extends SpectrumWriter {
+public class MspWriter extends SpectraWriter {
 
+    /**
+     * class constructor
+     * @param f file to be write to
+     * @param s spectrum to be written to given file
+     */
     public MspWriter(File f, List<Spectrum> s) {
         super(f, s);
     }
 
+    
+    /**
+     * writes msp files
+     */
     @Override
     public void write() {
           

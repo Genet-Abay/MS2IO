@@ -11,7 +11,7 @@ import java.util.logging.Logger;
  *
  * @author Genet
  */
-public class MspReader extends SpectrumReader {
+public class MspReader extends SpectraReader {
 
     private File indexFile = null;
     List<IndexKey> IKey = null;

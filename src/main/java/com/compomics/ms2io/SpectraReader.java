@@ -15,31 +15,42 @@ import java.util.List;
  *
  * @author Genet
  */
-public abstract class SpectrumReader {
+public abstract class SpectraReader {
 
+    /**
+     * spectra file to be read
+     */
     protected final File spectraFile;
 
-    protected SpectrumReader(File specFile) {
+    /**
+     * class constructor
+     * @param specFile file to be read
+     */
+    protected SpectraReader(File specFile) {
         this.spectraFile = specFile;
     }
 
+    /**
+     * abstract class to read all spectrum
+     * @return spectra
+     */
     public abstract ArrayList<Spectrum> readAll();
 
     /**
      * Reads part of spectra based on given criteria: precursor mass and mass
      * error
      *
-     * @param precMass
-     * @param error
-     * @return
+     * @param precMass precursor mass of spectra to be read
+     * @param error mass error
+     * @return array list of spectra
      */
     public abstract ArrayList<Spectrum> readPart(double precMass, double error);
 
     /**
      * Reads part of spectra based on criteria: spectrum title
      *
-     * @param title
-     * @return
+     * @param title of the spectra to be read
+     * @return array list of spectra
      */
     public abstract ArrayList<Spectrum> readPart(String title);
     

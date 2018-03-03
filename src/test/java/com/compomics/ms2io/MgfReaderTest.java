@@ -12,6 +12,10 @@ import java.util.List;
  */
 public class MgfReaderTest extends TestCase {
     
+    /**
+     * class constructor
+     * @param testName 
+     */
     public MgfReaderTest(String testName) {
         super(testName);
     }
@@ -22,7 +26,7 @@ public class MgfReaderTest extends TestCase {
     public void testReadAll() {
         
         System.out.println("readAll");
-        SpectrumReader instance = new MgfReader(new File("C:/pandyDS/testfile.mgf"));
+        SpectraReader instance = new MgfReader(new File("C:/pandyDS/testfile.mgf"));
         ArrayList<Spectrum> expResult = new ArrayList<>();
         
         //Spectrum 1
@@ -106,6 +110,7 @@ public class MgfReaderTest extends TestCase {
 
     /**
      * Test of readPart method, of class MgfReader.
+     * @throws java.io.IOException
      */
     public void testReadPart_double_double() throws IOException {
         System.out.println("readPart");
@@ -116,7 +121,7 @@ public class MgfReaderTest extends TestCase {
         Indexer giExp = new Indexer(new File("C:/pandyDS/testfile.mgf"));
         List<IndexKey> indxList = giExp.generate();
         
-        SpectrumReader instance = new MgfReader(new File("C:/pandyDS/testfile.mgf"), indxList);
+        SpectraReader instance = new MgfReader(new File("C:/pandyDS/testfile.mgf"), indxList);
         ArrayList<Spectrum> expResult = new ArrayList<>();
         
         //Spectrum 1
@@ -162,6 +167,7 @@ public class MgfReaderTest extends TestCase {
 
     /**
      * Test of readPart method, of class MgfReader.
+     * @throws java.io.IOException
      */
     public void testReadPart_String() throws IOException {
         System.out.println("readPart");
@@ -169,7 +175,7 @@ public class MgfReaderTest extends TestCase {
         Indexer giExp = new Indexer(new File("C:/pandyDS/testfile.mgf"));
         List<IndexKey> indxList = giExp.generate();
         
-        SpectrumReader instance = new MgfReader(new File("C:/pandyDS/testfile.mgf"), indxList);
+        SpectraReader instance = new MgfReader(new File("C:/pandyDS/testfile.mgf"), indxList);
         
         ArrayList<Spectrum> expResult = new ArrayList<>();
         
@@ -224,7 +230,7 @@ public class MgfReaderTest extends TestCase {
         Indexer giExp = new Indexer(new File("C:/pandyDS/testfile.mgf"));
         List<IndexKey> indxList = giExp.generate();
         
-        SpectrumReader instance = new MgfReader(new File("C:/pandyDS/testfile.mgf"), indxList);
+        SpectraReader instance = new MgfReader(new File("C:/pandyDS/testfile.mgf"), indxList);
      
         Spectrum expResult=new Spectrum();
         

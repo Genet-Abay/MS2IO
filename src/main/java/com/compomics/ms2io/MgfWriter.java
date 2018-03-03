@@ -18,13 +18,22 @@ import java.util.logging.Logger;
  *
  * @author Genet
  */
-public class MgfWriter extends SpectrumWriter {
+public class MgfWriter extends SpectraWriter {
 
+    
+    /**
+     * class constructor
+     * @param f file to be write to
+     * @param s spectrum to be write on the file
+     */
     public MgfWriter(File f, List<Spectrum> s) {
         super(f, s);
     }
     
 
+    /**
+     * writes mgf the spectrum
+     */
     @Override
     public void write() {
                

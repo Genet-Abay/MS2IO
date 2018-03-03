@@ -77,6 +77,14 @@ public class Peak implements Comparable<Peak>  {
         this.intensity = intensity;
     }
 
+    
+    /**
+     * compares given peak to current peak
+     * @param t given peak
+     * @return int greater than 0 if current peak greater than given peak,
+     * 0 if they are equal and int less than 0 if it is less than the given peak
+     * 
+     */
     @Override
     public int compareTo(Peak t) {
         

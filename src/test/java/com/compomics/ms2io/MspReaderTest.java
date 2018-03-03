@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import static junit.framework.Assert.assertEquals;
 import junit.framework.TestCase;
 import static junit.framework.Assert.assertEquals;
 
@@ -15,6 +14,10 @@ import static junit.framework.Assert.assertEquals;
  */
 public class MspReaderTest extends TestCase {
     
+    /**
+     * class constructor
+     * @param testName 
+     */
     public MspReaderTest(String testName) {
         super(testName);
     }
@@ -24,7 +27,7 @@ public class MspReaderTest extends TestCase {
      */
     public void testReadAll() {
         System.out.println("readAll");
-        SpectrumReader instance = new MspReader(new File("C:/pandyDS/testfile.msp"));
+        SpectraReader instance = new MspReader(new File("C:/pandyDS/testfile.msp"));
         ArrayList<Spectrum> expResult = new ArrayList<>();
         
         //Spectrum 1
@@ -103,7 +106,7 @@ public class MspReaderTest extends TestCase {
         
         Indexer giExp = new Indexer(new File("C:/pandyDS/testfile.msp"));
         List<IndexKey> indxList = giExp.generate();        
-        SpectrumReader instance = new MspReader(new File("C:/pandyDS/testfile.msp"), indxList);
+        SpectraReader instance = new MspReader(new File("C:/pandyDS/testfile.msp"), indxList);
         ArrayList<Spectrum> expResult = new ArrayList<>();
         
         //Spectrum 1
@@ -153,7 +156,7 @@ public class MspReaderTest extends TestCase {
         Indexer giExp = new Indexer(new File("C:/pandyDS/testfile.msp"));
         List<IndexKey> indxList = giExp.generate();
         
-        SpectrumReader instance = new MspReader(new File("C:/pandyDS/testfile.msp"), indxList);
+        SpectraReader instance = new MspReader(new File("C:/pandyDS/testfile.msp"), indxList);
         
         ArrayList<Spectrum> expResult = new ArrayList<>();
         
@@ -204,7 +207,7 @@ public class MspReaderTest extends TestCase {
         Indexer giExp = new Indexer(new File("C:/pandyDS/testfile.msp"));
         List<IndexKey> indxList = giExp.generate();
         
-        SpectrumReader instance = new MspReader(new File("C:/pandyDS/testfile.msp"), indxList);
+        SpectraReader instance = new MspReader(new File("C:/pandyDS/testfile.msp"), indxList);
      
         Spectrum expResult=new Spectrum();
         expResult.setTitle("YDDMAAAMK/2");

@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class App {
 
+    //main method to test the library
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         File specfile = new File("C:/pandyDS/testfile.mgf");
         //File opfile = new File("C:/pandyDS/human_hcd_selected_selected.msp");
@@ -40,11 +41,11 @@ public class App {
         
 
         if (specfile.getName().endsWith("mgf")) {
-            SpectrumReader rd = new MgfReader(specfile, indxList);
+            SpectraReader rd = new MgfReader(specfile, indxList);
             spectra = rd.readAll();
 
         } else if (specfile.getName().endsWith("msp")) {
-            SpectrumReader rd = new MspReader(specfile, indxList);
+            SpectraReader rd = new MspReader(specfile, indxList);
             spectra = rd.readAll();
 
         }

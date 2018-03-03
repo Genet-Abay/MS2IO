@@ -59,6 +59,7 @@ public class BufferedRAF extends RandomAccessFile{
 	 * Creates a BufferedRandomAccessFile.
 	 * @param filename the path to the file
 	 * @param mode size the size of the read buffer
+     * @param bufsize
 	 * @throws IOException
 	 */
 	public BufferedRAF(String filename, String mode, int bufsize)
@@ -73,6 +74,7 @@ public class BufferedRAF extends RandomAccessFile{
 	 * Returns the current offset in this file.
 	 * @return the offset from the beginning of the file, in bytes,
          * at which the next read or write occurs.
+     * @throws java.io.IOException
 	 */
 	@Override
 	public long getFilePointer() throws IOException {
@@ -189,6 +191,7 @@ public class BufferedRAF extends RandomAccessFile{
 	 * @param b the buffer into which the data is read.
 	 * @param off the start offset in array b at which the data is written.
 	 * @param len the maximum number of bytes read.
+         * @return number of bytes read
 	 * @throws IOException
 	 */
 	@Override

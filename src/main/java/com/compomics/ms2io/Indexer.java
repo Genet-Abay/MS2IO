@@ -46,7 +46,10 @@ public class Indexer implements Closeable, AutoCloseable {
         index=new ArrayList<>();
     }
 
-     
+     /**
+      * close the random access buffer
+      * @throws IOException 
+      */
     @Override
     public void close() throws IOException {
         braf.close();      
@@ -204,6 +207,10 @@ public class Indexer implements Closeable, AutoCloseable {
 
     }
 
+    /**
+     * saves generated index to given file
+     * @param file 
+     */
     public void saveIndex2File(File file)
     {
         FileOutputStream fout = null;

@@ -24,7 +24,7 @@ public class IndexKey implements Comparable<IndexKey>, Serializable {
      * secondary index: precursor mass
      */
     
-    private double pm;
+    private double precMass;
     
     /**
      * last index: scan number
@@ -61,7 +61,7 @@ public class IndexKey implements Comparable<IndexKey>, Serializable {
      * @return precursor mass
      */
     public double getPM() {
-        return this.pm;
+        return this.precMass;
     }
 
     
@@ -94,7 +94,7 @@ public class IndexKey implements Comparable<IndexKey>, Serializable {
      * @param pm 
      */
     public void setPM(double pm) {
-        this.pm = pm;
+        this.precMass = pm;
     }
     
     /**
@@ -103,7 +103,7 @@ public class IndexKey implements Comparable<IndexKey>, Serializable {
      */
     public String getCombinedIndex(){
         
-        return (Long.toString(this.pos)+";" + this.title+ ";" + this.scanNum + ";" + Double.toString(this.pm));
+        return (Long.toString(this.pos)+";" + this.title+ ";" + this.scanNum + ";" + Double.toString(this.precMass));
     }
 
     /**
@@ -116,7 +116,7 @@ public class IndexKey implements Comparable<IndexKey>, Serializable {
     @Override
     public int compareTo(IndexKey t) {
 
-        return Double.compare(this.pm, t.pm);
+        return Double.compare(this.precMass, t.precMass);
 
     }
 }

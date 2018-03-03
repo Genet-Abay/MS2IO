@@ -12,17 +12,31 @@ import java.util.List;
  *
  * @author Genet
  */
-public abstract class SpectrumWriter {
+public abstract class SpectraWriter {
     
+    /**
+     * file to be write to
+     */
     protected final File file;
+    /**
+     * list of spectra to be written on the file
+     */
     protected final List<Spectrum> spectra;
     
-    protected SpectrumWriter(File f, List<Spectrum> s){
+    /**
+     * this method writes list of spectra on the file
+     * @param f file to be written to
+     * @param s spectrum to be written on file
+     */
+    protected SpectraWriter(File f, List<Spectrum> s){
         this.file=f;
         this.spectra=s;
         
     }
     
+    /**
+     * writes the spectra on the file
+     */
     public abstract void write();
     
     
