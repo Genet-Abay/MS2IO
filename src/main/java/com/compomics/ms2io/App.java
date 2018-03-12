@@ -13,16 +13,16 @@ public class App {
 
     //main method to test the library
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        File specfile = new File("C:/pandyDS/testfile.mgf");
-        //File opfile = new File("C:/pandyDS/human_hcd_selected_selected.msp");
+        File specfile = new File("C:/pandyDS/AdLungCD4_Medium.mgf");// human_hcd_selected.msp
+        File opfile = new File("C:/pandyDS/AdLungCD4_Medium.mgf");
 
         String indxfilename = specfile.getName().substring(0, specfile.getName().lastIndexOf("."));
         File indxfile = new File(specfile.getParent(), indxfilename + ".idx");
 
-        double pcm = 379.6062;
-        double error = 0.05;
+        double pcm = 1298.5546875;//584.8876; //;
+        double error = 0.03;
 
-        List<Spectrum> spectra;
+        List<Spectrum> spectra = null;
         List<IndexKey> indxList;
 
         if (indxfile.exists()) {
@@ -37,20 +37,23 @@ public class App {
             Collections.sort(indxList);
 
         }
-        
-        
 
+        SpectraReader rd = null;
+        SpectraWriter wr =null;
         if (specfile.getName().endsWith("mgf")) {
-            SpectraReader rd = new MgfReader(specfile, indxList);
-            spectra = rd.readAll();
+            rd = new MgfReader(specfile, indxList);
+            wr = new MspWriter(opfile, spectra);
 
         } else if (specfile.getName().endsWith("msp")) {
-            SpectraReader rd = new MspReader(specfile, indxList);
-            spectra = rd.readAll();
+            rd = new MspReader(specfile, indxList);
+            wr = new MspWriter(opfile, spectra);
 
         }
 
-        //SpectrumWriter wr = new MspWriter(opfile, spectra);
-        // wr.write();
+        if (rd != null) {
+            spectra = rd.readPart(pcm, error);
+            wr.write();
+        }
+
     }
 }

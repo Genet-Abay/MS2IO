@@ -101,8 +101,17 @@ public class Indexer implements Closeable, AutoCloseable {
                 header = false;
                 line = braf.getNextLine();
                 indexObj = new IndexKey();
-                while (line != null &&  !line.startsWith("END") && !Character.isDigit(line.charAt(0))) {
-
+                while (line != null ) {
+                    if("".equals(line)){
+                         line = braf.getNextLine();
+                         continue;
+                    }
+                        
+                    else if(line.startsWith("END") || Character.isDigit(line.charAt(0)))
+                        break;
+                    // if empty line -> continue
+                    // if starts zith end -> break
+                    
                     if (line.startsWith("BEGIN")) {
                         indexObj.setPos(p);
                         header = true;
