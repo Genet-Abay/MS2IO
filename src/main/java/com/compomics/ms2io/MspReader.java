@@ -79,7 +79,6 @@ public class MspReader extends SpectraReader {
                 }
 
                 if (line.equals("")) {
-                    k.setTitle(spec.getTitle());
                     k.setPM(spec.getPCMass());
                     k.setScanNum(spec.getScanNumber());
                     spec.setIndex(k);
@@ -170,36 +169,6 @@ public class MspReader extends SpectraReader {
         return selectedSpectra;
     }
 
-    @Override
-    public ArrayList<Spectrum> readPart(String title) {
-
-        ArrayList<Spectrum> selectedSpectra = new ArrayList<>();
-        List<Long> pos;
-
-        Indexer indxer = new Indexer();
-        try {
-            if (this.IKey == null) {
-                if (this.indexFile != null) {
-                    this.IKey = indxer.readFromFile(indexFile);
-                } else {
-                    //Index key not found, it should be read from file or should be provided
-                }
-            }
-            
-            pos = positionsToberead(this.IKey, title);
-
-            int len = pos.size();
-            for (int a = 0; a < len; a++) {
-                selectedSpectra.add(readAt(pos.get(a)));
-            }
-
-        } catch (IOException ex) {
-            Logger.getLogger(MgfReader.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(MspReader.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return selectedSpectra;
-    }
 
  
 
@@ -229,7 +198,6 @@ public class MspReader extends SpectraReader {
             while (line != null) {
 
                 if (line.equals("")) {
-                    k.setTitle(spec.getTitle());
                     k.setPM(spec.getPCMass());
                     k.setScanNum(spec.getScanNumber());
                     spec.setIndex(k);

@@ -45,14 +45,6 @@ public abstract class SpectraReader {
      * @return array list of spectra
      */
     public abstract ArrayList<Spectrum> readPart(double precMass, double error);
-
-    /**
-     * Reads part of spectra based on criteria: spectrum title
-     *
-     * @param title of the spectra to be read
-     * @return array list of spectra
-     */
-    public abstract ArrayList<Spectrum> readPart(String title);
     
     /**
      * Reads spectrum at the specified positions
@@ -81,43 +73,49 @@ public abstract class SpectraReader {
         List<Long> pos = new ArrayList<>();
         double lowerBound = pm - error;
         double upperBound = pm + error;
-
-        for (IndexKey k : indKey) {
-            double mass=k.getPM();
+       int low=0;
+       int high=indKey.size()-1;
+       int startPos=0;
+       while(low<high){
            
-            if (lowerBound <= mass && mass <= upperBound) {
-                pos.add(k.getPos());
+           startPos=(low+high)/2;
+           if(indKey.get(startPos).getPM() > lowerBound && high!=startPos){
+               high=startPos;
+               
+           }
+           
+           else if(indKey.get(startPos).getPM() < lowerBound  && low!=startPos){
+               low=startPos;
+               
+           }
+            
+            else{
+                break;
+            }
+           
+       }
 
-                //index file recoreded in pm increasing order, so we can stop checking out of bounds
-                if (mass > upperBound) {
-                    break;
-                }
+       
+       
+       for (int a=startPos;a<indKey.size();a++) {
+            double mass= indKey.get(a).getPM();
+           
+            if (mass <= upperBound) {
+                pos.add(indKey.get(a).getPos());
+                
+            }
+            //index file recoreded in pm increasing order, so we can stop checking out of bounds
+            else{
+                break;
             }
         }
+       
+
 
         return pos;
     }
 
  
 
-    /**
-     * positions of the spectra to be read from given list of index
-     *
-     * @param indKey list of the index of the spectrum which contains positions
-     * of spectrum on the actual file, precursor mass and scan number
-     * @param title spectrum title to search for reading
-     * @return list of selected spectra positions
-     * @throws IOException
-     */
-    protected List<Long> positionsToberead(List<IndexKey> indKey, String title) throws IOException {
-
-        List<Long> pos = new ArrayList<>();
-
-        indKey.stream().filter((k) -> (k.getTitle().equals(title))).forEach((k) -> {
-            pos.add(k.getPos());
-        });
-
-        return pos;
-    }
 
 }

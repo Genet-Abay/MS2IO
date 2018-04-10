@@ -122,13 +122,11 @@ public class MgfReader extends SpectraReader {
                     spec.setCharge(line.substring(line.indexOf("=") + 1));
 
                 } else if (line.endsWith("END IONS")) {
-                    k.setTitle(spec.getTitle());
                     k.setPM(spec.getPCMass());
                     k.setScanNum(spec.getScanNumber());
                     spec.setIndex(k);
                     spec.setPeakList(pkList);
                     spectra.add(spec);
-                    k.setTitle(spec.getTitle());
                     k.setPM(spec.getPCMass());
                     k.setScanNum(spec.getScanNumber());
                     
@@ -180,40 +178,6 @@ public class MgfReader extends SpectraReader {
         return selectedSpectra;
 
     }
-
-    /**
-     * Returns list of selected spectrum based on spectrum title
-     *
-     * @return list of spectrum
-     *
-     */
-    @Override
-    public ArrayList<Spectrum> readPart(String title) {
-
-        ArrayList<Spectrum> selectedSpectra = new ArrayList<>();
-        List<Long> pos;
-        Indexer indxer = new Indexer();
-
-        try {
-            if (this.IKey == null) {
-                if (this.indexFile != null) {
-                    this.IKey = indxer.readFromFile(indexFile);
-                } else {
-                    //Index key not found, it should be read from file or should be provided
-                }
-            }
-            pos = positionsToberead(this.IKey, title);
-            int len = pos.size();
-            for (int a = 0; a < len; a++) {
-                selectedSpectra.add(readAt(pos.get(a)));
-            }
-        } catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(MgfReader.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return selectedSpectra;
-
-    }
-
  
     /**
      * Reads spectrum at the specified position
@@ -279,7 +243,6 @@ public class MgfReader extends SpectraReader {
                     spec.setCharge(line.substring(line.indexOf("=") + 1));
                     
                 } else if (line.endsWith("END IONS")) {
-                    k.setTitle(spec.getTitle());
                     k.setPM(spec.getPCMass());
                     k.setScanNum(spec.getScanNumber());
                     spec.setIndex(k);

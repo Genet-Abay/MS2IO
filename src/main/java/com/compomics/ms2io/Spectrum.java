@@ -270,14 +270,14 @@ public class Spectrum {
     public double getMinIntensity(){
         double[][] p=this.getPeakListDouble();
         int len=this.peakList.size();
-        double min=Double.MAX_VALUE;
+        this.minIntensity=Double.MAX_VALUE;
         for(int a=0;a<len;a++){
-            if(min>p[1][a]){
-                min=p[1][a];
+            if(this.minIntensity>p[1][a]){
+                this.minIntensity=p[1][a];
             }
         }
         
-        return min;
+        return this.minIntensity;
     }
     
     /**
@@ -287,14 +287,14 @@ public class Spectrum {
      public double getMaxIntensity(){
         double[][] p=this.getPeakListDouble();
         int len=this.peakList.size();
-        double max=Double.MIN_VALUE;
+        this.maxIntensity=Double.MIN_VALUE;
         for(int a=0;a<len;a++){
-            if(max < p[1][a]){
-                max=p[1][a];
+            if(this.maxIntensity < p[1][a]){
+                this.maxIntensity=p[1][a];
             }
         }
         
-        return max;
+        return this.maxIntensity;
     }
     
     
@@ -306,14 +306,14 @@ public class Spectrum {
     public double getMinMZ(){
         double[][] p=this.getPeakListDouble();
         int len=this.peakList.size();
-        double min=Double.MAX_VALUE;
+        this.minMZ=Double.MAX_VALUE;
         for(int a=0;a<len;a++){
-            if(min>p[0][a]){
-                min=p[0][a];
+            if(this.minMZ>p[0][a]){
+                this.minMZ=p[0][a];
             }
         }
         
-        return min;
+        return this.minMZ;
     }
     
     /**
@@ -323,14 +323,14 @@ public class Spectrum {
      public double getMaxMZ(){
         double[][] p=this.getPeakListDouble();
         int len=this.peakList.size();
-        double max=Double.MIN_VALUE;
+        this.maxMZ=Double.MIN_VALUE;
         for(int a=0;a<len;a++){
-            if(max < p[0][a]){
-                max=p[0][a];
+            if(this.maxMZ < p[0][a]){
+                this.maxMZ=p[0][a];
             }
         }
         
-        return max;
+        return this.maxMZ;
     }    
      
      /**

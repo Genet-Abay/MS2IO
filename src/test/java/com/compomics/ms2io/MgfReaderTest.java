@@ -52,7 +52,6 @@ public class MgfReaderTest extends TestCase {
       
         
         IndexKey k=new IndexKey();
-        k.setTitle("Test_Name1");
         k.setPM(355.91305541992);
         k.setPos(0L);
         k.setScanNum("874");
@@ -80,7 +79,6 @@ public class MgfReaderTest extends TestCase {
         sp2.setPeakList(pk);
         
         k=new IndexKey();
-        k.setTitle("Test_Name2");
         k.setPM(506.916564941406);
         k.setPos(327L);
         k.setScanNum("875");
@@ -147,7 +145,6 @@ public class MgfReaderTest extends TestCase {
       
         
         IndexKey k=new IndexKey();
-        k.setTitle("Test_Name1");
         k.setPM(355.91305541992);
         k.setPos(0L);
         k.setScanNum("874");
@@ -165,61 +162,7 @@ public class MgfReaderTest extends TestCase {
         assertEquals(expResult.get(0).getPeakList().size(), result.get(0).getPeakList().size());
     }
 
-    /**
-     * Test of readPart method, of class MgfReader.
-     * @throws java.io.IOException
-     */
-    public void testReadPart_String() throws IOException {
-        System.out.println("readPart");
-        String title = "Test_Title1";
-        Indexer giExp = new Indexer(new File("C:/pandyDS/testfile.mgf"));
-        List<IndexKey> indxList = giExp.generate();
-        
-        SpectraReader instance = new MgfReader(new File("C:/pandyDS/testfile.mgf"), indxList);
-        
-        ArrayList<Spectrum> expResult = new ArrayList<>();
-        
-        //Spectrum 1
-        Spectrum sp1=new Spectrum();
-        sp1.setCharge("3+");
-        sp1.setFileName("Test_File1");   
-        sp1.setPCIntesity(95551.1171875);
-        sp1.setPCMass(355.913055419922);        
-        sp1.setRtTime(1699.8885);
-        sp1.setScanNumber("874");
-        sp1.setTitle("Test_Title1");
-        
-        ArrayList<Peak> pk=new ArrayList<>();
-        Peak p=new Peak(85.39144897, 149.7417449951);
-        pk.add(p);
-        p=new Peak(92.209198, 143.806930542);
-        
-        pk.add(p);        
-        p=new Peak(94.47766876, 142.0615997314);
-        pk.add(p);
-        
-        sp1.setPeakList(pk);
-      
-        
-        IndexKey k=new IndexKey();
-        k.setTitle("Test_Name1");
-        k.setPM(355.91305541992);
-        k.setPos(0L);
-        k.setScanNum("874");
-        sp1.setIndex(k);
-        
-        expResult.add(sp1);
-        
-        ArrayList<Spectrum> result = instance.readPart(title);
-        
-        assertEquals(expResult.size(), result.size());
-        assertEquals(expResult.get(0).getTitle(), result.get(0).getTitle());
-        assertEquals(expResult.get(0).getFileName(), result.get(0).getFileName());
-        assertEquals(expResult.get(0).getPCMass(), result.get(0).getPCMass());
-        assertEquals(expResult.get(0).getCharge(), result.get(0).getCharge());        
-        assertEquals(expResult.get(0).getPeakList().size(), result.get(0).getPeakList().size());
-    }
-
+   
     /**
      * Test of readAt method, of class MgfReader.
      * @throws java.io.IOException
@@ -255,7 +198,6 @@ public class MgfReaderTest extends TestCase {
       
         
         IndexKey k=new IndexKey();
-        k.setTitle("Test_Name1");
         k.setPM(355.91305541992);
         k.setPos(0L);
         k.setScanNum("874");
