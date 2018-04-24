@@ -8,7 +8,6 @@ com\compomics\ms2io\BufferedRAF.class
 com\compomics\ms2io\IndexKey.class
 com\compomics\ms2io\MspWriter.class
 com\compomics\ms2io\MgfWriter.class
-com\compomics\ms2io\CompressionUtils.class
 com\compomics\ms2io\MspReader.class
 com\compomics\ms2io\MzmlReader.class
 com\compomics\ms2io\MgfReader.class

@@ -66,21 +66,21 @@ public class Spectrum {
     /**
      * minimum m/z value of the spectrum
      */
-    private double minMZ;
+    private double minMZ=0;
     
     /**
      * maximum m/z value of the spectrum
      */
-    private double maxMZ;
+    private double maxMZ=0;
       /**
      * minimum intensity value of the spectrum
      */
-    private double minIntensity;
+    private double minIntensity=0;
     
     /**
      * maximum intensity value of the spectrum
      */
-    private double maxIntensity;
+    private double maxIntensity=0;
     
     /**
      * Getter for the scan number.
@@ -268,6 +268,9 @@ public class Spectrum {
      * @return 
      */
     public double getMinIntensity(){
+        if(this.minIntensity!=0){
+             return this.minIntensity;
+         }
         double[][] p=this.getPeakListDouble();
         int len=this.peakList.size();
         this.minIntensity=Double.MAX_VALUE;
@@ -280,11 +283,18 @@ public class Spectrum {
         return this.minIntensity;
     }
     
+     public void setMinIntensity(double minInt){
+         this.minIntensity=minInt;
+         
+     }
     /**
      * returns the maximum Intensity
      * @return 
      */
      public double getMaxIntensity(){
+         if(this.maxIntensity!=0){
+             return this.maxIntensity;
+         }
         double[][] p=this.getPeakListDouble();
         int len=this.peakList.size();
         this.maxIntensity=Double.MIN_VALUE;
@@ -297,6 +307,10 @@ public class Spectrum {
         return this.maxIntensity;
     }
     
+     public void setMaxIntensity(double maxInt){
+         this.maxIntensity=maxInt;
+         
+     }
     
     
     /**
@@ -304,6 +318,11 @@ public class Spectrum {
      * @return 
      */
     public double getMinMZ(){
+        
+        if(this.minMZ!=0){
+             return this.minMZ;
+         }
+        
         double[][] p=this.getPeakListDouble();
         int len=this.peakList.size();
         this.minMZ=Double.MAX_VALUE;
@@ -316,11 +335,20 @@ public class Spectrum {
         return this.minMZ;
     }
     
+    public void setMaxMz(double maxMz){
+         this.maxMZ=maxMz;
+         
+     }
+    
     /**
      * returns the maximum mass over charge ratio
      * @return 
      */
      public double getMaxMZ(){
+         if(this.maxMZ!=0){
+             return this.maxMZ;
+         }
+         
         double[][] p=this.getPeakListDouble();
         int len=this.peakList.size();
         this.maxMZ=Double.MIN_VALUE;
@@ -331,7 +359,12 @@ public class Spectrum {
         }
         
         return this.maxMZ;
-    }    
+    } 
+     
+     public void setMinMz(double minMz){
+         this.minMZ=minMz;
+         
+     }
      
      /**
       * set Index of the spectrum

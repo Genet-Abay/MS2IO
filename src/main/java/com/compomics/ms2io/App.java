@@ -1,14 +1,10 @@
 package com.compomics.ms2io;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.stream.XMLStreamException;
 
 /**
  * Hello world!
@@ -22,19 +18,13 @@ public class App {
         File specfile = new File("C:/pandyDS/MSMSpos20_6.mzML");// human_hcd_selected.msp//  MSMSpos20_6.mzML//AdLungCD4_Medium.mgf
         File opfile = new File("C:/pandyDS/AdLungCD4_Medium.mgf");
 
-        if (specfile.getName().endsWith("mzML")) {
-
-            MzmlReader reader = new MzmlReader(specfile);
-            try {
-                ArrayList<Spectrum> spec = reader.readAll();
-                System.out.println("reading finished" + spec.toString());
-            } catch (XMLStreamException ex) {
-                Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
+//        if (specfile.getName().endsWith("mzML")) {
+//
+//            MzmlReader reader = new MzmlReader(specfile);
+//            ArrayList<Spectrum> spec = reader.readAll();
+//            System.out.println("reading finished" + spec.toString());
+//
+//        }
 
         String indxfilename = specfile.getName().substring(0, specfile.getName().lastIndexOf("."));
         File indxfile = new File(specfile.getParent(), indxfilename + ".idx");
