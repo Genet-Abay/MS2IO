@@ -2,6 +2,7 @@ package com.compomics.ms2io;
 
 import java.util.ArrayList;
 
+
 /**
  *
  * @author Genet

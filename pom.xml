@@ -42,7 +42,7 @@
     </dependencies>
     
     
-     <repositories>
+    <repositories>
         <repository>
             <id>pst-release</id>
             <name>EBI Nexus Repository</name>
@@ -55,5 +55,47 @@
             <name>EBI Nexus Snapshots Repository</name>
             <url>http://www.ebi.ac.uk/Tools/maven/repos/content/repositories/pst-snapshots</url>
         </repository>
+        
+        <repository>
+            <id>genesis-maven2-repository</id>
+            <name>Genesis maven2 repository</name>
+            <url>http://genesis.UGent.be/maven2</url>
+        </repository>
     </repositories>
+    
+    
+    <build>                
+        <plugins>
+            <!--By default test is skipped for deployment -->            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.12.4</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+ 
+    
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+          
+            
+        </license>
+    </licenses>
+    
+    <!-- a remote repository for the deploy -->
+    <distributionManagement>
+        <repository>
+            <id>archiva.compomics_maven_2</id>
+            <name>Internal Release Repository</name>
+            <url>http://genesis.ugent.be/archiva/repository/compomics_maven_2</url>
+        </repository>
+        
+    </distributionManagement>
+    
 </project>

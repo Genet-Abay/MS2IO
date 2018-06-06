@@ -5,6 +5,7 @@
  */
 package com.compomics.ms2io;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.util.List;
 
@@ -21,10 +22,10 @@ public abstract class SpectraWriter {
     /**
      * list of spectra to be written on the file
      */
-    protected final List<Spectrum> spectra;
+    protected List<Spectrum> spectra;
     
     /**
-     * this method writes list of spectra on the file
+     *constructor initializing the object with file and list of spectrum
      * @param f file to be written to
      * @param s spectrum to be written on file
      */
@@ -34,10 +35,27 @@ public abstract class SpectraWriter {
         
     }
     
+    
+      /**
+     * constructor initializing with file
+     * @param f file to be written to
+     */
+    protected SpectraWriter(File f){
+        this.file=f;
+        
+    }
+    
     /**
      * writes the spectra on the file
      */
     public abstract void write();
     
+    /**
+     * appends spectrum to the file
+     * @param spec 
+     * @param bw buffered writer 
+     */
+    
+    public abstract void write(Spectrum spec, BufferedWriter bw);
     
 }
