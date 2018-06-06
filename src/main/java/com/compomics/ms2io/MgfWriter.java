@@ -115,13 +115,7 @@ public class MgfWriter extends SpectraWriter {
         } catch (IOException ex) {
             Logger.getLogger(MgfWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
-//        finally {
-//            try {
-//                bw.close();
-//            } catch (IOException ex) {
-//                Logger.getLogger(MgfWriter.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
+
     }
 
 }

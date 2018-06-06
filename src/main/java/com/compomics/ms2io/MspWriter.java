@@ -111,13 +111,7 @@ public class MspWriter extends SpectraWriter {
             Logger.getLogger(MspWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-//        finally {
-//            try {
-//                bw.close();
-//            } catch (IOException ex) {
-//                Logger.getLogger(MspWriter.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
+
     }
 
 }
