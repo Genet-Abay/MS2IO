@@ -19,8 +19,8 @@ public class App {
     //main method to test the library
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         
-         File file=new File("C:/pandyDS/testfile.msp");
-        File decoyFile = new File("C:/pandyDS/testfile_decoy" + ".msp");
+         File file=new File("C:/pandyDS/testfile.mgf");
+        File decoyFile = new File("C:/pandyDS/testfile_decoy" + ".mgf");
         BufferedWriter bw=null;
         
         Indexer gi;
@@ -29,8 +29,9 @@ public class App {
             
         List<IndexKey> indxList=gi.generate();
         
-        MspReader rd = new MspReader(file, indxList);
-        MspWriter wr = new MspWriter(decoyFile);
+        
+        SpectraReader rd = new MgfReader(file, indxList);
+        SpectraWriter wr = new MgfWriter(decoyFile);
 
          bw = new BufferedWriter(new FileWriter(decoyFile));
         Spectrum spectrum;
