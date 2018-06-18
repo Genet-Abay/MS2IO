@@ -18,45 +18,51 @@ public class App {
 
     //main method to test the library
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        
-         File file=new File("C:/pandyDS/testfile.mgf");
-        File decoyFile = new File("C:/pandyDS/testfile_decoy" + ".mgf");
-        BufferedWriter bw=null;
-        
-        Indexer gi;
-        try {
-            gi = new Indexer(file);
-            
-        List<IndexKey> indxList=gi.generate();
-        
-        
-        SpectraReader rd = new MgfReader(file, indxList);
-        SpectraWriter wr = new MgfWriter(decoyFile);
 
-         bw = new BufferedWriter(new FileWriter(decoyFile));
-        Spectrum spectrum;
-        for (IndexKey indx : indxList) {
-            Long pos = indx.getPos();
-            spectrum = rd.readAt(pos);
-            wr.write(spectrum, bw);
-        }
+        //Test library merge and append
+        File file1 = new File("C:/pandyDS/testfile.msp");
+        File file2 = new File("C:/pandyDS/testfile2.msp");
+        File file3 = new File("C:/pandyDS/testfile3.msp");
+       // MergeLibrary mrg = new MergeLibrary(file1, file2, file3);
+       // mrg.Start();
 
-      
-        } catch (IOException ex) {
-            Logger.getLogger(MspWriter.class.getName()).log(Level.SEVERE, null, ex);
-        }finally {
-            try {
-                bw.close();
-            } catch (IOException ex) {
-                Logger.getLogger(MspWriter.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-        
-        
-        
-        
-
+       AppendLibrary appnd=new AppendLibrary(file1, file2);
+       appnd.Append();
+//        File file=new File("C:/pandyDS/testfile.mgf");
+//        File decoyFile = new File("C:/pandyDS/testfile_decoy" + ".mgf");
+//        BufferedWriter bw=null;
+//        
+//        Indexer gi;
+//        try {
+//            gi = new Indexer(file);
+//            
+//        List<IndexKey> indxList=gi.generate();
+//        
+//        
+//        SpectraReader rd = new MgfReader(file, indxList);
+//        SpectraWriter wr = new MgfWriter(decoyFile);
+//
+//         bw = new BufferedWriter(new FileWriter(decoyFile));
+//        Spectrum spectrum;
+//        for (IndexKey indx : indxList) {
+//            Long pos = indx.getPos();
+//            spectrum = rd.readAt(pos);
+//            wr.write(spectrum, bw);
+//        }
+//
+//      
+//        } catch (IOException ex) {
+//            Logger.getLogger(MspWriter.class.getName()).log(Level.SEVERE, null, ex);
+//        }finally {
+//            try {
+//                bw.close();
+//            } catch (IOException ex) {
+//                Logger.getLogger(MspWriter.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+//        
+//        
+//        
 //        File specfile = new File("C:/pandyDS/MSMSpos20_6.mzML");// human_hcd_selected.msp//  MSMSpos20_6.mzML//AdLungCD4_Medium.mgf
 //        File opfile = new File("C:/pandyDS/AdLungCD4_Medium.mgf");
 //

@@ -42,7 +42,7 @@ public class MspWriter extends SpectraWriter {
 
         BufferedWriter bw = null;
         try {
-            bw = new BufferedWriter(new FileWriter(this.file));
+            bw = new BufferedWriter(new FileWriter(this.file, true));
             for (Spectrum spectrum : this.spectra) {
 
                 ArrayList<Peak> peaks;
