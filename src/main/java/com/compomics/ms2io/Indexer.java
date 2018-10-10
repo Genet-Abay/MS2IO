@@ -219,25 +219,19 @@ public class Indexer implements Closeable, AutoCloseable {
     public void saveIndex2File(File file)
     {
         FileOutputStream fout = null;
+        ObjectOutputStream oos=null;
         try {
-            String indxfilename = file.getName().substring(0, file.getName().lastIndexOf("."));
-            File indxFile = new File(file.getParent(), indxfilename + ".idx");
-            fout = new FileOutputStream(indxFile);
-            BufferedOutputStream bos=new BufferedOutputStream(fout);
-            ObjectOutputStream opStream = new ObjectOutputStream(bos);
-            // BufferedWriter bw = new BufferedWriter(new FileWriter(indxFile));
-            for (IndexKey inx : index) {
-                //String temp = inx.getCombinedIndex();
-                opStream.writeObject(inx);
-                //opStream.write('\n');
-
-            }   opStream.close();
+            String indxfilename = file.getName().substring(0, file.getName().lastIndexOf("."));           
+            fout = new FileOutputStream(file.getParent()+ "\\"+ indxfilename + ".idx");
+            oos = new ObjectOutputStream(fout);
+            oos.writeObject(index);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Indexer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(Indexer.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
+                oos.close();
                 fout.close();
             } catch (IOException ex) {
                 Logger.getLogger(Indexer.class.getName()).log(Level.SEVERE, null, ex);
@@ -251,22 +245,29 @@ public class Indexer implements Closeable, AutoCloseable {
      * @param indxfile file contains the index of spectra which contains
      * positions of spectrum on the actual file precursor mass and scan number
      * @return array of indexes
-     * @throws IOException
-     * @throws java.lang.ClassNotFoundException
      */
-    public List<IndexKey> readFromFile(File indxfile) throws IOException, ClassNotFoundException {
-        List<IndexKey> indxKey = new ArrayList<>();
-        try {
-            FileInputStream fin = new FileInputStream(indxfile);
-            BufferedInputStream bis = new BufferedInputStream(fin);
-            ObjectInputStream ois = new ObjectInputStream(bis);
-            IndexKey indObject = (IndexKey) ois.readObject();
-            while (true) {
-                indxKey.add(indObject);
-                indObject = (IndexKey) ois.readObject();
+    public List<IndexKey> readFromFile(File indxfile) {
+       FileInputStream fis=null;
+       ObjectInputStream ois=null;
+        try {            
+            fis = new FileInputStream(indxfile); 
+            ois  = new ObjectInputStream(fis);
+            index=(List<IndexKey>)ois.readObject();                
+            
+        } catch (EOFException ex) {
+            Logger.getLogger(Indexer.class.getName()).log(Level.SEVERE, null, ex);
+            
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(Indexer.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }finally {
+            try {
+                ois.close();
+                fis.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Indexer.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (EOFException e) {
-            return indxKey;
         }
+        return index;
     }
 }

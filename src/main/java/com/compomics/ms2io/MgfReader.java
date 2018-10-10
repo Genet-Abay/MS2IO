@@ -93,13 +93,21 @@ public class MgfReader extends SpectraReader {
                     spec = new Spectrum();
                     k.setPos(braf.getFilePointer());
                 } else if (line.startsWith("TITLE")) {
+                    //spec.setTitle(line.substring(line.indexOf("=") + 1));
+                    spec.setSequence("");
+                    spec.setProtein("");
+                    spec.setFileName(this.spectraFile.getName());
                     String[] temp = line.split(" ");
                     int tempLen = temp.length;
                     for (int b = 0; b < tempLen; b++) {
-                        if (temp[b].startsWith("TITLE")) {
-                            String title = temp[b].substring(temp[b].indexOf("=") + 1);
+                        if(temp[b].startsWith("TITLE")){
+                            String title=temp[b].substring(temp[b].indexOf("=") +1);
+                            if(line.contains("decoy")){
+                                title+= "_decoy";
+                            }
                             spec.setTitle(title);
-                        } else if (temp[b].startsWith("File")) {
+                        }
+                        else if (temp[b].startsWith("File")) {
                             String name = temp[b].substring(temp[b].indexOf(":") + 2, temp[b].indexOf(",") -1);
                             spec.setFileName(name);
                         } else if (temp[b].startsWith("scan")) {
@@ -121,14 +129,15 @@ public class MgfReader extends SpectraReader {
 
                     spec.setCharge(line.substring(line.indexOf("=") + 1));
 
-                } else if (line.endsWith("END IONS")) {
-                    k.setPM(spec.getPCMass());
-                    k.setScanNum(spec.getScanNumber());
+                } else if (line.endsWith("END IONS")) {    
+                    spec.setNumPeaks(pkList.size());                   
+                    k.setPM(spec.getPCMass());                  
+                    k.setScanNum(spec.getScanNumber());                  
                     spec.setIndex(k);
                     spec.setPeakList(pkList);
                     spectra.add(spec);
-                    k.setPM(spec.getPCMass());
-                    k.setScanNum(spec.getScanNumber());
+                    
+                   
                     
 
                 }
@@ -172,7 +181,7 @@ public class MgfReader extends SpectraReader {
                 selectedSpectra.add(readAt(pos.get(a)));
             }
 
-        } catch (IOException | ClassNotFoundException ex) {
+        } catch (IOException ex) { 
             Logger.getLogger(MgfReader.class.getName()).log(Level.SEVERE, null, ex);
         }
         return selectedSpectra;
@@ -218,13 +227,20 @@ public class MgfReader extends SpectraReader {
                     k=new IndexKey();
                     k.setPos(braf.getFilePointer());
                 } else if (line.startsWith("TITLE")) {
+                    //spec.setTitle(line.substring(line.indexOf("=") + 1));
+                    spec.setSequence("");
+                    spec.setProtein("");
                     String[] temp = line.split(" ");
                     int tempLen = temp.length;
                     for (int b = 0; b < tempLen; b++) {
-                        if (temp[b].startsWith("TITLE")) {
-                            String title = temp[b].substring(temp[b].indexOf("=") + 1);
+                        if(temp[b].startsWith("TITLE")){
+                            String title=temp[b].substring(temp[b].indexOf("=") +1);
+                            if(line.contains("decoy")){
+                                title+= "_decoy";
+                            }
                             spec.setTitle(title);
-                        } else if (temp[b].startsWith("File")) {
+                        }
+                        else if (temp[b].startsWith("File")) {
                             String name = temp[b].substring(temp[b].indexOf(":") + 2, temp[b].indexOf(",") - 1);
                             spec.setFileName(name);
                         } else if (temp[b].startsWith("scan")) {
@@ -243,6 +259,7 @@ public class MgfReader extends SpectraReader {
                     spec.setCharge(line.substring(line.indexOf("=") + 1));
                     
                 } else if (line.endsWith("END IONS")) {
+                    spec.setNumPeaks(pkList.size());  
                     k.setPM(spec.getPCMass());
                     k.setScanNum(spec.getScanNumber());
                     spec.setIndex(k);

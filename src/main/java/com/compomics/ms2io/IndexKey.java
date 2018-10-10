@@ -1,6 +1,7 @@
 package com.compomics.ms2io;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  *
@@ -8,7 +9,7 @@ import java.io.Serializable;
  */
 public class IndexKey implements Comparable<IndexKey>, Serializable {
     
-    private static final long SerialversionUID = 129348938L;
+   // private static final long SERIALVERSIONUID = 129348938L;
     
 
     /**
@@ -96,8 +97,10 @@ public class IndexKey implements Comparable<IndexKey>, Serializable {
      */
     @Override
     public int compareTo(IndexKey t) {
-
-        return Double.compare(this.precMass, t.precMass);
+        BigDecimal bd1=BigDecimal.valueOf(this.precMass);
+        BigDecimal bd2=BigDecimal.valueOf(t.precMass);       
+        
+        return bd1.compareTo(bd2);
 
     }
 }

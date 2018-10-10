@@ -1,10 +1,12 @@
 package com.compomics.ms2io;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Genet
  */
-public class Peak implements Comparable<Peak>  {
+public class Peak implements Comparable<Peak>, Serializable {
     
     
     /**

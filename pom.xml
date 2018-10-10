@@ -65,14 +65,14 @@
     
     
     <build>                
-        <plugins>
+       <plugins>
             <!--By default test is skipped for deployment -->            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.12.4</version>
                 <configuration>
-                    <skipTests>true</skipTests>
+                    <!--<skipTests>true</skipTests> -->
                 </configuration>
             </plugin>
         </plugins>
@@ -88,7 +88,7 @@
         </license>
     </licenses>
     
-    <!-- a remote repository for the deploy -->
+    <!-- a remote repository for the deploy, UGent genesis repository-->
     <distributionManagement>
         <repository>
             <id>archiva.compomics_maven_2</id>
