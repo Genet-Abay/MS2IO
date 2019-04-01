@@ -7,7 +7,7 @@ import java.util.ArrayList;
  *
  * @author Genet
  */
-public class Spectrum implements Serializable{
+public class Spectrum implements Serializable {
 
     /**
      * Index of this spectrum
@@ -18,16 +18,16 @@ public class Spectrum implements Serializable{
      * Spectrum title.
      */
     private String title;
-    
-       /**
+
+    /**
      * Sequence if it is given
      */
     private String sequence;
-    
-        /**
+
+    /**
      * protein name of the spectrum if given
      */
-    private String protein="";
+    private String protein = "";
 
     /**
      * Molecular weight of the peptide. Only msp file format
@@ -137,8 +137,8 @@ public class Spectrum implements Serializable{
     public String getTitle() {
         return this.title;
     }
-    
-       /**
+
+    /**
      * Returns sequence
      *
      * @return sequence
@@ -146,8 +146,8 @@ public class Spectrum implements Serializable{
     public String getSequence() {
         return this.sequence;
     }
-    
-           /**
+
+    /**
      * Returns protein name
      *
      * @return protein
@@ -155,11 +155,11 @@ public class Spectrum implements Serializable{
     public String getProtein() {
         return this.protein;
     }
-    
-        /**
+
+    /**
      * Sets the name of the protein
      *
-     * @param protein 
+     * @param protein
      */
     public void setProtein(String protein) {
         this.protein = protein;
@@ -173,11 +173,11 @@ public class Spectrum implements Serializable{
     public void setTitle(String title) {
         this.title = title;
     }
-    
-       /**
+
+    /**
      * Sets the spectrum sequence.
      *
-     * @param sequence 
+     * @param sequence
      */
     public void setSequence(String sequence) {
         this.sequence = sequence;
@@ -200,58 +200,62 @@ public class Spectrum implements Serializable{
     public ArrayList<Peak> getPeakList() {
         return peakList;
     }
-
+    
     public void setMW(double mw) {
         this.mw = mw;
     }
-
+    
     public double getMW() {
         return this.mw;
-
+        
     }
-
+    
     public double getRtTime() {
         return this.rtTime;
-
+        
     }
-
+    
     public void setRtTime(double rt) {
         this.rtTime = rt;
     }
-
+    
     public void setNumPeaks(int numPeaks) {
         this.numPeaks = numPeaks;
     }
-
+    
     public int getNumPeaks() {
         if (Double.compare(this.numPeaks, 0.0) <= 0) {
-            this.numPeaks = this.peakList.size();
+            try{
+                this.numPeaks = this.peakList.size();
+            }catch(Exception ex){
+                System.out.println(ex);
+            }
         }
         return this.numPeaks;
     }
-
+    
     public void setPCMass(double pcm) {
         this.pcMass = pcm;
     }
-
+    
     public double getPCMass() {
         return this.pcMass;
     }
-
+    
     public void setPCIntesity(double pcI) {
         this.pcIntensity = pcI;
-
+        
     }
-
+    
     public double getPCIntensity() {
         return this.pcIntensity;
     }
-
+    
     public void setCharge(String ch) {
         this.charge = ch;
-
+        
     }
-
+    
     public String getCharge() {
         return this.charge;
     }
@@ -263,23 +267,24 @@ public class Spectrum implements Serializable{
      * @return the peak list as double
      */
     public double[][] getPeakListDouble() {
-        int len = this.peakList.size();
-        int c = 0;
-        double[][] peakDouble = new double[len][2];
+        
+        double[][] peakDouble = new double[0][0];
         try {
-
+            int len = this.peakList.size();
+            int c = 0;
+            peakDouble = new double[len][2];
+            
             for (Peak p : this.peakList) {
                 peakDouble[c][0] = p.getMz();
                 peakDouble[c][1] = p.getIntensity();
                 c++;
             }
-
+            
         } catch (Exception ex1) {
-          
-
-            System.out.println(Double.toString(peakDouble[0][0]) + ", " + Double.toString(peakDouble[1][0]));
+            
+            System.out.println(ex1);
         }
-
+        
         return peakDouble;
     }
 
@@ -289,14 +294,19 @@ public class Spectrum implements Serializable{
      * @return m/z as double
      */
     public double[] getMZDouble() {
-
-        int len = this.peakList.size();
-        int c = 0;
-        double[] mzDouble = new double[len];
-        for (Peak p : this.peakList) {
-            mzDouble[c++] = p.getMz();
-
+        double[] mzDouble = new double[0];
+        try {
+            int len = this.peakList.size();
+            int c = 0;
+            mzDouble = new double[len];
+            for (Peak p : this.peakList) {
+                mzDouble[c++] = p.getMz();
+                
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
         }
+        
         return mzDouble;
     }
 
@@ -306,14 +316,19 @@ public class Spectrum implements Serializable{
      * @return intensity as double array
      */
     public double[] getIntensityDouble() {
-
-        int len = this.peakList.size();
-        int c = 0;
-        double[] intensityDouble = new double[len];
-        for (Peak p : this.peakList) {
-            intensityDouble[c++] = p.getIntensity();
-
+        double[] intensityDouble = new double[0];
+        try {
+            int len = this.peakList.size();
+            int c = 0;
+            intensityDouble = new double[len];
+            for (Peak p : this.peakList) {
+                intensityDouble[c++] = p.getIntensity();
+                
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
         }
+        
         return intensityDouble;
     }
 
@@ -323,24 +338,28 @@ public class Spectrum implements Serializable{
      * @return
      */
     public double getMinIntensity() {
-        if (this.minIntensity != 0) {
-            return this.minIntensity;
-        }
-        double[][] p = this.getPeakListDouble();
-        int len = this.peakList.size();
-        this.minIntensity = Double.MAX_VALUE;
-        for (int a = 0; a < len; a++) {
-            if (this.minIntensity > p[a][1]) {
-                this.minIntensity = p[a][1];
+        try {
+            if (this.minIntensity != 0) {
+                return this.minIntensity;
             }
+            double[][] p = this.getPeakListDouble();
+            int len = this.peakList.size();
+            this.minIntensity = Double.MAX_VALUE;
+            for (int a = 0; a < len; a++) {
+                if (this.minIntensity > p[a][1]) {
+                    this.minIntensity = p[a][1];
+                }
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
         }
-
+        
         return this.minIntensity;
     }
-
+    
     public void setMinIntensity(double minInt) {
         this.minIntensity = minInt;
-
+        
     }
 
     /**
@@ -349,24 +368,28 @@ public class Spectrum implements Serializable{
      * @return
      */
     public double getMaxIntensity() {
-        if (this.maxIntensity != 0) {
-            return this.maxIntensity;
-        }
-        double[][] p = this.getPeakListDouble();
-        int len = this.peakList.size();
-        this.maxIntensity = Double.MIN_VALUE;
-        for (int a = 0; a < len; a++) {
-            if (this.maxIntensity < p[a][1]) {
-                this.maxIntensity = p[a][1];
+        try {
+            if (this.maxIntensity != 0) {
+                return this.maxIntensity;
             }
+            double[][] p = this.getPeakListDouble();
+            int len = this.peakList.size();
+            this.maxIntensity = Double.MIN_VALUE;
+            for (int a = 0; a < len; a++) {
+                if (this.maxIntensity < p[a][1]) {
+                    this.maxIntensity = p[a][1];
+                }
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
         }
-
+        
         return this.maxIntensity;
     }
-
+    
     public void setMaxIntensity(double maxInt) {
         this.maxIntensity = maxInt;
-
+        
     }
 
     /**
@@ -375,24 +398,28 @@ public class Spectrum implements Serializable{
      * @return
      */
     public double getMinMZ() {
-     
-        double[][] p = this.getPeakListDouble();
-        int len = this.peakList.size();
-        this.minMZ = Double.MAX_VALUE;
-        double currentMz;
-        for (int a = 0; a < len; a++) {
-            currentMz=p[a][0];
-            if (this.minMZ > currentMz) {
-                this.minMZ = currentMz;
+        try {
+            double[][] p = this.getPeakListDouble();
+            int len = this.peakList.size();
+            this.minMZ = Double.MAX_VALUE;
+            double currentMz;
+            for (int a = 0; a < len; a++) {
+                currentMz = p[a][0];
+                if (this.minMZ > currentMz) {
+                    this.minMZ = currentMz;
+                }
             }
+        } catch (Exception ex) {
+            System.out.println(ex);
+            
         }
-
+        
         return this.minMZ;
     }
-
+    
     public void setMaxMz(double maxMz) {
         this.maxMZ = maxMz;
-
+        
     }
 
     /**
@@ -401,24 +428,28 @@ public class Spectrum implements Serializable{
      * @return
      */
     public double getMaxMZ() {
-  
-        double[][] p = this.getPeakListDouble();
-        int len = this.peakList.size();
-        this.maxMZ = Double.MIN_VALUE;
-        double currentMz;
-        for (int a = 0; a < len; a++) {
-            currentMz =  p[a][0];
-            if (this.maxMZ < currentMz) {
-                this.maxMZ = currentMz;
+        try {
+            double[][] p = this.getPeakListDouble();
+            int len = this.peakList.size();
+            this.maxMZ = Double.MIN_VALUE;
+            double currentMz;
+            for (int a = 0; a < len; a++) {
+                currentMz = p[a][0];
+                if (this.maxMZ < currentMz) {
+                    this.maxMZ = currentMz;
+                }
             }
+        } catch (Exception ex) {
+            
+            System.out.println(ex);
         }
-
+        
         return this.maxMZ;
     }
-
+    
     public void setMinMz(double minMz) {
         this.minMZ = minMz;
-
+        
     }
 
     /**

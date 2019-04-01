@@ -119,7 +119,10 @@ public class MgfReader extends SpectraReader {
                 } else if (line.startsWith("PEPMASS")) {
                     String[] temp = line.split(" ");
                     spec.setPCMass(Double.parseDouble(temp[0].substring(temp[0].indexOf("=") + 1)));
-                    spec.setPCIntesity(Double.parseDouble(temp[1]));
+                    if(temp.length > 1){
+                        spec.setPCIntesity(Double.parseDouble(temp[1]));
+                    }
+                  
 
                 } else if (line.startsWith("RTINSECONDS")) {
                     String temp = line.substring(line.indexOf("=") + 1);
@@ -198,11 +201,13 @@ public class MgfReader extends SpectraReader {
     public Spectrum readAt(Long position) {
         
         Spectrum spec = new Spectrum();
+        String msg="";
         try {
             
             ArrayList<Peak> pkList;
             String line;
             Peak pk;
+            
             
             BufferedRAF braf = new BufferedRAF(this.spectraFile, "r");
             IndexKey k=new IndexKey();
@@ -252,7 +257,9 @@ public class MgfReader extends SpectraReader {
                 } else if (line.startsWith("PEPMASS")) {
                     String[] temp = line.split(" ");
                     spec.setPCMass(Double.parseDouble(temp[0].substring(temp[0].indexOf("=") + 1)));
-                    spec.setPCIntesity(Double.parseDouble(temp[1]));
+                    if(temp.length > 1){
+                        spec.setPCIntesity(Double.parseDouble(temp[1]));
+                    }
                     
                 } else if (line.startsWith("CHARGE")) {
                     
@@ -270,7 +277,7 @@ public class MgfReader extends SpectraReader {
                 line = braf.readLine();
                 
             }
-        } catch (IOException ex) {
+        } catch (IOException | NumberFormatException ex ) {
             Logger.getLogger(MgfReader.class.getName()).log(Level.SEVERE, null, ex);
         }
         

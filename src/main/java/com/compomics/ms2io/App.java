@@ -5,10 +5,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Hello world!
@@ -20,14 +16,24 @@ public class App {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
 
         //Test library merge and append
-        File file1 = new File("C:/pandyDS/testfile.msp");
-        File file2 = new File("C:/pandyDS/testfile2.msp");
-        File file3 = new File("C:/pandyDS/testfile3.msp");
+        File file1 = new File("C:/pandyDS/SpecA.mgf");
+        File file2 = new File("C:/pandyDS/SpecA_converted.msp");
+        BufferedWriter bw = new BufferedWriter(new FileWriter(file2));
+        SpectraReader rd = new MgfReader(file1);
+        SpectraWriter wr = new MspWriter(file2);
+        
+        ArrayList<Spectrum> spectraAll;
+        spectraAll=rd.readAll();
+        for(Spectrum s:spectraAll){
+            wr.write(s, bw);
+        }
+        
+       // File file3 = new File("C:/pandyDS/testfile3.msp");
        // MergeLibrary mrg = new MergeLibrary(file1, file2, file3);
        // mrg.Start();
 
-       AppendLibrary appnd=new AppendLibrary(file1, file2);
-       appnd.Append();
+       //AppendLibrary appnd=new AppendLibrary(file1, file2);
+       //appnd.Append();
 //        File file=new File("C:/pandyDS/testfile.mgf");
 //        File decoyFile = new File("C:/pandyDS/testfile_decoy" + ".mgf");
 //        BufferedWriter bw=null;

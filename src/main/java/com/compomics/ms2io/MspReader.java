@@ -25,8 +25,6 @@ public class MspReader extends SpectraReader {
         super(specFfile);
 
     }
-    
-    
 
     /**
      * Constructor to create object for spectrum reader
@@ -66,9 +64,8 @@ public class MspReader extends SpectraReader {
         try {
 
             //BufferedReader br = new BufferedReader(new FileReader(this.spectraFile));
-
             BufferedRAF braf = new BufferedRAF(this.spectraFile, "r");
-            IndexKey k=new IndexKey();
+            IndexKey k = new IndexKey();
             Peak pk;
             ArrayList<Peak> pkList = new ArrayList<>();
             Spectrum spec = new Spectrum();
@@ -81,13 +78,13 @@ public class MspReader extends SpectraReader {
                 }
 
                 if (line.equals("")) {
-                    spec.setNumPeaks(pkList.size());                   
+                    spec.setNumPeaks(pkList.size());
                     k.setPM(spec.getPCMass());
                     k.setScanNum(spec.getScanNumber());
                     spec.setIndex(k);
                     spec.setPeakList(pkList);
                     spectra.add(spec);
-                    
+
                 } else if (Character.isDigit(line.charAt(0))) {
                     String fline = line.replaceAll("\\s+", " ");
                     String[] p = fline.split(" ");
@@ -102,15 +99,14 @@ public class MspReader extends SpectraReader {
                     spec = new Spectrum();
                     spec.setTitle(line.substring(line.indexOf(":") + 2));
 
-                    spec.setSequence(line.substring(line.indexOf(":")+2, line.indexOf("/")));
-                    
+                    spec.setSequence(line.substring(line.indexOf(":") + 2, line.indexOf("/")));
+
                     String ch = line.substring(line.indexOf('/') + 1);
                     spec.setCharge(ch);
-                    ch=line.substring(line.indexOf(':')+ 1, line.indexOf('/'));
+                    ch = line.substring(line.indexOf(':') + 1, line.indexOf('/'));
                     spec.setSequence(ch);
                     spec.setFileName(this.spectraFile.getName());
                     k.setPos(braf.getFilePointer());
-                   
 
                 } else if (line.startsWith("MW:")) {
                     try {
@@ -130,16 +126,16 @@ public class MspReader extends SpectraReader {
                         } else if (temp[b].startsWith("Scan")) {
                             String scan = temp[b].substring(temp[b].indexOf("=") + 1);
                             spec.setScanNumber(scan);
-                        }else if(temp[b].startsWith("Protein")){
-                            String prot=temp[b].substring(temp[b].indexOf("=" + 1));
+                        } else if (temp[b].startsWith("Protein")) {
+                            String prot = temp[b].substring(temp[b].indexOf("=" + 1));
                             spec.setProtein(prot);
-                        }else if(temp[b].startsWith("Scan")){
-                            String scan=temp[b].substring(temp[b].indexOf("=") + 1);
+                        } else if (temp[b].startsWith("Scan")) {
+                            String scan = temp[b].substring(temp[b].indexOf("=") + 1);
                             spec.setScanNumber(scan);
                         }
                     }
 
-                } 
+                }
                 line = braf.readLine();
 
             }
@@ -167,18 +163,15 @@ public class MspReader extends SpectraReader {
                 }
             }
             pos = positionsToberead(this.IKey, precMass, error);
-             int len = pos.size();
+            int len = pos.size();
             for (int a = 0; a < len; a++) {
                 selectedSpectra.add(readAt(pos.get(a)));
             }
         } catch (IOException ex) {
             Logger.getLogger(MgfReader.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
         return selectedSpectra;
     }
-
-
- 
 
     /**
      * Reads spectrum at the specified position
@@ -197,7 +190,7 @@ public class MspReader extends SpectraReader {
             ArrayList<Peak> pkList;
 
             BufferedRAF braf = new BufferedRAF(this.spectraFile, "r");
-            IndexKey k=new IndexKey();
+            IndexKey k = new IndexKey();
             braf.seek(position);
             line = braf.readLine();
 
@@ -205,8 +198,8 @@ public class MspReader extends SpectraReader {
 
             while (line != null) {
 
-                if (line.equals("")) {                   
-                    spec.setNumPeaks(pkList.size());                    
+                if (line.equals("")) {
+                    spec.setNumPeaks(pkList.size());
                     k.setPM(spec.getPCMass());
                     k.setScanNum(spec.getScanNumber());
                     spec.setIndex(k);
@@ -222,10 +215,10 @@ public class MspReader extends SpectraReader {
                     pkList.add(pk);
 
                 } else if (line.startsWith("Name")) {
-                    k=new IndexKey();
+                    k = new IndexKey();
                     k.setPos(braf.getFilePointer());
                     spec.setTitle(line.substring(line.indexOf(":") + 2));
-                    spec.setSequence(line.substring(line.indexOf(":")+2, line.indexOf("/")));
+                    spec.setSequence(line.substring(line.indexOf(":") + 2, line.indexOf("/")));
                     String ch = line.substring(line.indexOf('/') + 1);
                     spec.setCharge(ch);
 
@@ -238,18 +231,18 @@ public class MspReader extends SpectraReader {
                     for (int b = 0; b < tempLen; b++) {
                         if (temp[b].startsWith("Parent")) {
                             double precmass = Double.parseDouble(temp[b].substring(temp[b].indexOf("=") + 1));
-                            spec.setPCMass(precmass);                           
-                           
-                        }else if(temp[b].startsWith("Protein")){
-                            String prot=temp[b].substring(temp[b].indexOf("=") + 1);
+                            spec.setPCMass(precmass);
+
+                        } else if (temp[b].startsWith("Protein")) {
+                            String prot = temp[b].substring(temp[b].indexOf("=") + 1);
                             spec.setProtein(prot);
-                        }else if(temp[b].startsWith("Scan")){
-                            String scan=temp[b].substring(temp[b].indexOf("=") + 1);
+                        } else if (temp[b].startsWith("Scan")) {
+                            String scan = temp[b].substring(temp[b].indexOf("=") + 1);
                             spec.setScanNumber(scan);
                         }
                     }
 
-                } 
+                }
                 line = braf.readLine();
             }
 

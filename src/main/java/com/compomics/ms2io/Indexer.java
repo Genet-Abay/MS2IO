@@ -1,7 +1,5 @@
 package com.compomics.ms2io;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.Closeable;
 import java.io.EOFException;
 import java.io.File;
@@ -68,7 +66,7 @@ public class Indexer implements Closeable, AutoCloseable {
         if (this.file.getName().endsWith("mgf")) {
             mgfIndexer();
 
-        } else if (this.file.getName().endsWith("msp")) {
+        } else if (this.file.getName().endsWith("msp") || this.file.getName().endsWith("sptxt")) {
            mspIndexer();
         } else {
             //report file type error
@@ -113,6 +111,7 @@ public class Indexer implements Closeable, AutoCloseable {
                     // if starts zith end -> break
                     
                     if (line.startsWith("BEGIN")) {
+                       // p = braf.getFilePointer();
                         indexObj.setPos(p);
                         header = true;
                     }
@@ -175,7 +174,7 @@ public class Indexer implements Closeable, AutoCloseable {
                 indexObj = new IndexKey();
                 while (line != null && !line.equals("")&& !Character.isDigit(line.charAt(0))) {
 
-                    if (line.startsWith("Name")) {
+                    if (line.startsWith("Name")) {                       
                         indexObj.setPos(p);
                         header = true;
                     }
@@ -192,9 +191,7 @@ public class Indexer implements Closeable, AutoCloseable {
                                 
                             } 
                         }
-
-                    } 
-                    
+                    }                     
                     line = braf.getNextLine();
                 }
                 if (header) {
