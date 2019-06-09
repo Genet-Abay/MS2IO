@@ -76,7 +76,7 @@ public class MgfReader extends SpectraReader {
                     line = line.replace("\r", "");
                 }
                 if (line.equals("")) {
-                    //throw new Error("Bad spectrum format");
+                    //ignore the extra line in between the header and the data and between peaks
 
                 } else if (Character.isDigit(line.charAt(0))) {
                     String fline = line.replaceAll("\\s+", " ");
@@ -219,9 +219,12 @@ public class MgfReader extends SpectraReader {
             
             while (line != null) {
                 
-                //if line is starts with digit it assumes as a peak
-                if (Character.isDigit(line.charAt(0))) {
-                    String[] p = line.split(" ");
+                if(line.equals("")){
+                    //do nothing
+                }
+                else if (Character.isDigit(line.charAt(0))) {
+                    String fline = line.replaceAll("\\s+", " ");
+                    String[] p = fline.split(" ");
                     double pcm = Double.parseDouble(p[0]);
                     double pci = Double.parseDouble(p[1]);
                     
