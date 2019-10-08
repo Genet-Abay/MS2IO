@@ -1,4 +1,4 @@
-package com.compomics.ms2io;
+package com.compomics.ms2io.controller;
 
 import java.io.File;
 import java.io.IOException;

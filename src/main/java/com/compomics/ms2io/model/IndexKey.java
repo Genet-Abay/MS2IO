@@ -1,4 +1,4 @@
-package com.compomics.ms2io;
+package com.compomics.ms2io.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

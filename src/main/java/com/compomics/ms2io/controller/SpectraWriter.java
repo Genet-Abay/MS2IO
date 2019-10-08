@@ -3,11 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.compomics.ms2io;
+package com.compomics.ms2io.controller;
 
+import com.compomics.ms2io.model.Spectrum;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -56,6 +60,11 @@ public abstract class SpectraWriter {
      * @param bw buffered writer 
      */
     
-    public abstract void write(Spectrum spec, BufferedWriter bw);
+    public abstract void write(Spectrum spec);
+    
+    public abstract void closeWriter();
+    
+
+
     
 }

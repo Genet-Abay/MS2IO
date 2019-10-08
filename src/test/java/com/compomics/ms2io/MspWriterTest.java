@@ -15,6 +15,11 @@
  */
 package com.compomics.ms2io;
 
+import com.compomics.ms2io.controller.MspReader;
+import com.compomics.ms2io.controller.Indexer;
+import com.compomics.ms2io.controller.MspWriter;
+import com.compomics.ms2io.model.Spectrum;
+import com.compomics.ms2io.model.IndexKey;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -63,12 +68,12 @@ public class MspWriterTest extends TestCase {
         MspReader rd = new MspReader(file, indxList);
         MspWriter wr = new MspWriter(decoyFile);
 
-        BufferedWriter bw = new BufferedWriter(new FileWriter(decoyFile));
+       
         Spectrum spectrum;
         for (IndexKey indx : indxList) {
             Long pos = indx.getPos();
             spectrum = rd.readAt(pos);
-            wr.write(spectrum, bw);
+            wr.write(spectrum);
         }
 
       

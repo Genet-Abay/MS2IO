@@ -1,5 +1,8 @@
-package com.compomics.ms2io;
+package com.compomics.ms2io.controller;
 
+import com.compomics.ms2io.model.Spectrum;
+import com.compomics.ms2io.model.Peak;
+import com.compomics.ms2io.model.IndexKey;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,7 +61,7 @@ public class MgfReader extends SpectraReader {
      */
     @Override
     public ArrayList<Spectrum> readAll() {
-        ArrayList<Spectrum> spectra = new ArrayList<>();
+        ArrayList<Spectrum> spectra = new ArrayList<>(100000);
         try {
             //BufferedReader br = new BufferedReader(new FileReader(this.spectraFile));
 
@@ -85,7 +88,11 @@ public class MgfReader extends SpectraReader {
                     double pcm = Double.parseDouble(p[0]);
                     double pci = Double.parseDouble(p[1]);
 
-                    pk = new Peak(pcm, pci);
+                    String annotation = "";
+                    if(p.length > 2){
+                        annotation = p[2];
+                    }
+                    pk=new Peak(pcm, pci, annotation);  
                     pkList.add(pk);
 
                 } else if (line.startsWith("BEGIN")) {
@@ -93,24 +100,25 @@ public class MgfReader extends SpectraReader {
                     spec = new Spectrum();
                     k.setPos(braf.getFilePointer());
                 } else if (line.startsWith("TITLE")) {
-                    //spec.setTitle(line.substring(line.indexOf("=") + 1));
+                   // spec.setTitle(line.substring(line.indexOf("=") + 1));
                     spec.setSequence("");
                     spec.setProtein("");
-                    spec.setFileName(this.spectraFile.getName());
+                    spec.setTitle(line);
                     String[] temp = line.split(" ");
                     int tempLen = temp.length;
                     for (int b = 0; b < tempLen; b++) {
-                        if(temp[b].startsWith("TITLE")){
-                            String title=temp[b].substring(temp[b].indexOf("=") +1);
-                            if(line.contains("decoy")){
-                                title+= "_decoy";
-                            }
-                            spec.setTitle(title);
-                        }
-                        else if (temp[b].startsWith("File")) {
-                            String name = temp[b].substring(temp[b].indexOf(":") + 2, temp[b].indexOf(",") -1);
-                            spec.setFileName(name);
-                        } else if (temp[b].startsWith("scan")) {
+//                        if(temp[b].startsWith("TITLE")){
+//                            String title=temp[b].substring(temp[b].indexOf("=") +1);
+//                            if(line.contains("Decoy") || line.contains("decoy")|| line.contains("DECOY")){
+//                                title+= "_decoy";
+//                            }
+//                            spec.setTitle(title);
+//                        }
+//                        else if (temp[b].startsWith("File")) {
+//                            String name = temp[b].substring(temp[b].indexOf(":") + 2, temp[b].indexOf(",") -1);
+//                            spec.setFileName(name);
+//                        } else 
+                         if (temp[b].startsWith("scan")) {
                             String ss = temp[b].replaceAll("[^0-9?!\\.]", "");
                             spec.setScanNumber(ss);
                         }
@@ -166,7 +174,7 @@ public class MgfReader extends SpectraReader {
     @Override
     public ArrayList<Spectrum> readPart(double precMass, double error) {
 
-        ArrayList<Spectrum> selectedSpectra = new ArrayList<>();
+        ArrayList<Spectrum> selectedSpectra = new ArrayList<>(100000);
         Indexer indxer = new Indexer();
         
         try {
@@ -228,30 +236,36 @@ public class MgfReader extends SpectraReader {
                     double pcm = Double.parseDouble(p[0]);
                     double pci = Double.parseDouble(p[1]);
                     
-                    pk = new Peak(pcm, pci);
+                    String annotation = "";
+                    if(p.length > 2){
+                        annotation = p[2];
+                    }
+                    pk=new Peak(pcm, pci, annotation);  
                     pkList.add(pk);
                     
                 } else if (line.startsWith("BEGIN")) {
                     k=new IndexKey();
                     k.setPos(braf.getFilePointer());
                 } else if (line.startsWith("TITLE")) {
-                    //spec.setTitle(line.substring(line.indexOf("=") + 1));
+                    spec.setTitle(line);
                     spec.setSequence("");
                     spec.setProtein("");
                     String[] temp = line.split(" ");
                     int tempLen = temp.length;
                     for (int b = 0; b < tempLen; b++) {
-                        if(temp[b].startsWith("TITLE")){
-                            String title=temp[b].substring(temp[b].indexOf("=") +1);
-                            if(line.contains("decoy")){
-                                title+= "_decoy";
-                            }
-                            spec.setTitle(title);
-                        }
-                        else if (temp[b].startsWith("File")) {
-                            String name = temp[b].substring(temp[b].indexOf(":") + 2, temp[b].indexOf(",") - 1);
-                            spec.setFileName(name);
-                        } else if (temp[b].startsWith("scan")) {
+//                        if(temp[b].startsWith("TITLE")){
+//                            String title=temp[b].substring(temp[b].indexOf("=") +1);
+//                            if(line.contains("decoy")){
+//                                title+= "_decoy";
+//                            }
+//                            spec.setTitle(title);
+//                        }
+//                        if (temp[b].startsWith("File")) {
+//                            String name = temp[b].substring(temp[b].indexOf(":") + 2, temp[b].indexOf(",") - 1);
+//                            spec.setFileName(name);
+//                        } 
+                        //else 
+                        if (temp[b].startsWith("scan")) {
                             String ss = temp[b].replaceAll("[^0-9?!\\.]", "");
                             spec.setScanNumber(ss);
                         }

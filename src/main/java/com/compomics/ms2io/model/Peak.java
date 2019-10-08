@@ -1,4 +1,4 @@
-package com.compomics.ms2io;
+package com.compomics.ms2io.model;
 
 import java.io.Serializable;
 
@@ -18,16 +18,24 @@ public class Peak implements Comparable<Peak>, Serializable {
      * intensity of the peak.
      */
     private double intensity;
-
+    
     /**
+     * annotation of the peak
+     */
+    private String annotation = "";
+
+    
+     /**
      * class constructor
      *
      * @param mz the m/z value of the peak
      * @param intensity the intensity of the peak
+     * @param annotation peak annotation
      */
-    public Peak(double mz, double intensity) {
+    public Peak(double mz, double intensity, String annotation) {
         this.mz = mz;
         this.intensity = intensity;
+        this.annotation=annotation;
     }
 
     /**
@@ -79,6 +87,25 @@ public class Peak implements Comparable<Peak>, Serializable {
         this.intensity = intensity;
     }
 
+    
+    
+      /**
+     * Returns the annotation.
+     *
+     * @return the annotation of this peak
+     */
+    public String getPeakAnnotation() {
+        return annotation;
+    }
+
+    /**
+     * Set the annotation.
+     *
+     * @param annotation to set
+     */
+    public void setPeakAnnotation(String annotation) {
+        this.annotation = annotation;
+    }
     
     /**
      * compares given peak to current peak

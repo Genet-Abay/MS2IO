@@ -1,7 +1,8 @@
-package com.compomics.ms2io;
+package com.compomics.ms2io.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -13,6 +14,29 @@ public class Spectrum implements Serializable {
      * Index of this spectrum
      */
     private IndexKey indx;
+
+    public Spectrum() {
+
+        this.indx = new IndexKey();
+        this.protein = "";
+        this.title = "";
+        this.sequence = "";
+        this.mw = 0;
+        this.charge = new Charge(1, "+");
+        this.pcMass = 0;
+        this.pcIntensity = 0;
+        this.comment = "";
+        this.peakList = new ArrayList<>();
+        this.numPeaks = 0;
+        this.rtTime = 0;
+        this.scanNumber = "";
+        this.minMZ = 0;
+        this.maxMZ = 0;
+        this.minIntensity = 0;
+        this.maxIntensity = 0;
+        modifications = new ArrayList<>();
+
+    }
 
     /**
      * Spectrum title.
@@ -42,7 +66,7 @@ public class Spectrum implements Serializable {
     /**
      * Spectrum title.
      */
-    private String charge;
+    private Charge charge;
 
     /**
      * precursor mass.
@@ -55,9 +79,9 @@ public class Spectrum implements Serializable {
     private double pcIntensity;
 
     /**
-     * Spectrum file name.
+     * set only if the spectrum is msp format otherwise it is null
      */
-    private String fileName;
+    private String comment;
 
     /**
      * peaks of the spectrum sorted in ascending order of mz value
@@ -77,21 +101,26 @@ public class Spectrum implements Serializable {
     /**
      * minimum m/z value of the spectrum
      */
-    private double minMZ = 0;
+    private double minMZ;
 
     /**
      * maximum m/z value of the spectrum
      */
-    private double maxMZ = 0;
+    private double maxMZ;
     /**
      * minimum intensity value of the spectrum
      */
-    private double minIntensity = 0;
+    private double minIntensity;
 
     /**
      * maximum intensity value of the spectrum
      */
-    private double maxIntensity = 0;
+    private double maxIntensity;
+
+    /**
+     * number modification
+     */
+    private List<Modification> modifications;
 
     /**
      * Getter for the scan number.
@@ -112,21 +141,38 @@ public class Spectrum implements Serializable {
     }
 
     /**
-     * Returns the file name.
      *
-     * @return the file name
+     * @param m modification to add to list of modification for this spectrum
      */
-    public String getFileName() {
-        return fileName;
+    public void setModification(List<Modification> m) {
+        this.modifications = m;
     }
 
     /**
-     * Sets the file name.
+     * return list of modification for this spectrum
      *
-     * @param fileName the file name
+     * @return
      */
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public List<Modification> getModifications() {
+        return this.modifications;
+    }
+
+    /**
+     * return list of modification for this spectrum
+     *
+     * @return
+     */
+    public String getModifications_asStr() {
+        StringBuilder strb = new StringBuilder();
+        if (this.modifications != null) {            
+            strb.append(Integer.toString(this.modifications.size()));
+            for (Modification m : this.modifications) {
+                strb.append("/");
+                strb.append(m.getModification());
+            }
+        }
+
+        return strb.toString();
     }
 
     /**
@@ -136,6 +182,33 @@ public class Spectrum implements Serializable {
      */
     public String getTitle() {
         return this.title;
+    }
+
+    /**
+     * Sets the spectrum title.
+     *
+     * @param title the file name
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * Returns comment
+     *
+     * @return comment, if it is mgf the value is ""
+     */
+    public String getComment() {
+        return this.comment;
+    }
+
+    /**
+     * Sets the comment field of the spectrum if it is msp file format.
+     *
+     * @param comment
+     */
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     /**
@@ -166,15 +239,6 @@ public class Spectrum implements Serializable {
     }
 
     /**
-     * Sets the spectrum title.
-     *
-     * @param title the file name
-     */
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    /**
      * Sets the spectrum sequence.
      *
      * @param sequence
@@ -200,64 +264,93 @@ public class Spectrum implements Serializable {
     public ArrayList<Peak> getPeakList() {
         return peakList;
     }
-    
+
     public void setMW(double mw) {
         this.mw = mw;
     }
-    
+
     public double getMW() {
         return this.mw;
-        
+
     }
-    
+
     public double getRtTime() {
         return this.rtTime;
-        
+
     }
-    
+
     public void setRtTime(double rt) {
         this.rtTime = rt;
     }
-    
+
     public void setNumPeaks(int numPeaks) {
         this.numPeaks = numPeaks;
     }
-    
+
     public int getNumPeaks() {
         if (Double.compare(this.numPeaks, 0.0) <= 0) {
-            try{
+            try {
                 this.numPeaks = this.peakList.size();
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 System.out.println(ex);
             }
         }
         return this.numPeaks;
     }
-    
+
     public void setPCMass(double pcm) {
         this.pcMass = pcm;
     }
-    
+
     public double getPCMass() {
         return this.pcMass;
     }
-    
+
     public void setPCIntesity(double pcI) {
         this.pcIntensity = pcI;
-        
+
     }
-    
+
     public double getPCIntensity() {
         return this.pcIntensity;
     }
-    
+
     public void setCharge(String ch) {
-        this.charge = ch;
-        
+        String sign = "+";
+        int value = 1;
+        if (!"".endsWith(ch)) {
+            if (ch.contains("-")) {
+                sign = "-";
+            }
+            ch = ch.replaceAll("[^\\d]", "");
+            try {
+                value = Integer.parseInt(ch);
+            } catch (Exception ex) {
+
+                System.out.println("conversion error - parse string to int");
+            }
+
+            this.charge = new Charge(value, sign);
+        }
+
     }
-    
-    public String getCharge() {
+
+    /**
+     * get charge of this spectrum
+     *
+     * @return
+     */
+    public Charge getCharge() {
         return this.charge;
+    }
+
+    /**
+     * get charge of this spectrum in string format
+     *
+     * @return
+     */
+    public String getCharge_asStr() {
+        return (this.charge.getCharge());
     }
 
     /**
@@ -267,24 +360,24 @@ public class Spectrum implements Serializable {
      * @return the peak list as double
      */
     public double[][] getPeakListDouble() {
-        
+
         double[][] peakDouble = new double[0][0];
         try {
             int len = this.peakList.size();
             int c = 0;
             peakDouble = new double[len][2];
-            
+
             for (Peak p : this.peakList) {
                 peakDouble[c][0] = p.getMz();
                 peakDouble[c][1] = p.getIntensity();
                 c++;
             }
-            
+
         } catch (Exception ex1) {
-            
+
             System.out.println(ex1);
         }
-        
+
         return peakDouble;
     }
 
@@ -301,12 +394,12 @@ public class Spectrum implements Serializable {
             mzDouble = new double[len];
             for (Peak p : this.peakList) {
                 mzDouble[c++] = p.getMz();
-                
+
             }
         } catch (Exception ex) {
             System.out.println(ex);
         }
-        
+
         return mzDouble;
     }
 
@@ -323,12 +416,12 @@ public class Spectrum implements Serializable {
             intensityDouble = new double[len];
             for (Peak p : this.peakList) {
                 intensityDouble[c++] = p.getIntensity();
-                
+
             }
         } catch (Exception ex) {
             System.out.println(ex);
         }
-        
+
         return intensityDouble;
     }
 
@@ -353,13 +446,13 @@ public class Spectrum implements Serializable {
         } catch (Exception ex) {
             System.out.println(ex);
         }
-        
+
         return this.minIntensity;
     }
-    
+
     public void setMinIntensity(double minInt) {
         this.minIntensity = minInt;
-        
+
     }
 
     /**
@@ -383,13 +476,13 @@ public class Spectrum implements Serializable {
         } catch (Exception ex) {
             System.out.println(ex);
         }
-        
+
         return this.maxIntensity;
     }
-    
+
     public void setMaxIntensity(double maxInt) {
         this.maxIntensity = maxInt;
-        
+
     }
 
     /**
@@ -411,15 +504,15 @@ public class Spectrum implements Serializable {
             }
         } catch (Exception ex) {
             System.out.println(ex);
-            
+
         }
-        
+
         return this.minMZ;
     }
-    
+
     public void setMaxMz(double maxMz) {
         this.maxMZ = maxMz;
-        
+
     }
 
     /**
@@ -440,16 +533,16 @@ public class Spectrum implements Serializable {
                 }
             }
         } catch (Exception ex) {
-            
+
             System.out.println(ex);
         }
-        
+
         return this.maxMZ;
     }
-    
+
     public void setMinMz(double minMz) {
         this.minMZ = minMz;
-        
+
     }
 
     /**

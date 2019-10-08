@@ -1,5 +1,10 @@
 package com.compomics.ms2io;
 
+import com.compomics.ms2io.controller.SpectraWriter;
+import com.compomics.ms2io.controller.MspWriter;
+import com.compomics.ms2io.controller.MgfReader;
+import com.compomics.ms2io.controller.SpectraReader;
+import com.compomics.ms2io.model.Spectrum;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -18,14 +23,13 @@ public class App {
         //Test library merge and append
         File file1 = new File("C:/pandyDS/SpecA.mgf");
         File file2 = new File("C:/pandyDS/SpecA_converted.msp");
-        BufferedWriter bw = new BufferedWriter(new FileWriter(file2));
         SpectraReader rd = new MgfReader(file1);
         SpectraWriter wr = new MspWriter(file2);
         
         ArrayList<Spectrum> spectraAll;
         spectraAll=rd.readAll();
         for(Spectrum s:spectraAll){
-            wr.write(s, bw);
+            wr.write(s);
         }
         
        // File file3 = new File("C:/pandyDS/testfile3.msp");

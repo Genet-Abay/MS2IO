@@ -1,4 +1,4 @@
-package com.compomics.ms2io;
+package com.compomics.ms2io.controller;
 
 //import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 //import java.io.ByteArrayOutputStream;

@@ -1,5 +1,6 @@
-package com.compomics.ms2io;
+package com.compomics.ms2io.controller;
 
+import com.compomics.ms2io.model.IndexKey;
 import java.io.Closeable;
 import java.io.EOFException;
 import java.io.File;
