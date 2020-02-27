@@ -171,7 +171,6 @@ public class Spectrum implements Serializable {
                 strb.append(m.getModification());
             }
         }
-
         return strb.toString();
     }
 
@@ -316,11 +315,13 @@ public class Spectrum implements Serializable {
     }
 
     public void setCharge(String ch) {
-        String sign = "+";
+        String sign = "";
         int value = 1;
-        if (!"".endsWith(ch)) {
+        if (!"".equals(ch)) {
             if (ch.contains("-")) {
                 sign = "-";
+            }else if (ch.contains("+")) {
+                sign = "+";
             }
             ch = ch.replaceAll("[^\\d]", "");
             try {

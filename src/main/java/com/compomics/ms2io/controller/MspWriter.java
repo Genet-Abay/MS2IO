@@ -61,14 +61,15 @@ public class MspWriter extends SpectraWriter {
                 bfr.newLine();
                 bfr.write(spectrum.getComment());
                 bfr.newLine();
-                bfr.write("Num Peaks: " + spectrum.getNumPeaks());
+                bfr.write("Num peaks: " + spectrum.getNumPeaks());
                 bfr.newLine();
 
                 //writing peaks
                 peaks = spectrum.getPeakList();
 
                 for (Peak peak : peaks) {
-                    bfr.write(Double.toString(peak.getMz()) + " " + Double.toString(peak.getIntensity()));
+                   // bfr.write(Double.toString(peak.getMz()) + " " + Double.toString(peak.getIntensity()));
+                    bfr.write(Double.toString(peak.getMz()) + "\t" + Double.toString(peak.getIntensity()) + "\t" + peak.getPeakAnnotation());
                     bfr.newLine();
                 }
                 bfr.newLine();
@@ -99,7 +100,7 @@ public class MspWriter extends SpectraWriter {
             bfr.newLine();
             bfr.write(spectrum.getComment());
             bfr.newLine();
-            bfr.write("Num Peaks: " + spectrum.getNumPeaks());
+            bfr.write("Num peaks: " + spectrum.getNumPeaks());
             bfr.newLine();
 
             //writing peaks
