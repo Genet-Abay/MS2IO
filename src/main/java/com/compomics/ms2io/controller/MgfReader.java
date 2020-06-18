@@ -103,7 +103,7 @@ public class MgfReader extends SpectraReader {
                    // spec.setTitle(line.substring(line.indexOf("=") + 1));
                     spec.setSequence("");
                     spec.setProtein("");
-                    spec.setTitle(line);
+                    spec.setTitle(line.substring(line.indexOf("=") + 1));
                     String[] temp = line.split(" ");
                     int tempLen = temp.length;
                     for (int b = 0; b < tempLen; b++) {
@@ -247,7 +247,7 @@ public class MgfReader extends SpectraReader {
                     k=new IndexKey();
                     k.setPos(braf.getFilePointer());
                 } else if (line.startsWith("TITLE")) {
-                    spec.setTitle(line);
+                    spec.setTitle(line.substring(line.indexOf("=") + 1));
                     spec.setSequence("");
                     spec.setProtein("");
                     String[] temp = line.split(" ");
@@ -278,6 +278,10 @@ public class MgfReader extends SpectraReader {
                         spec.setPCIntesity(Double.parseDouble(temp[1]));
                     }
                     
+                }else if (line.startsWith("RTINSECONDS")) {
+                    String temp = line.substring(line.indexOf("=") + 1);
+                    spec.setRtTime(Double.parseDouble(temp));
+
                 } else if (line.startsWith("CHARGE")) {
                     
                     spec.setCharge(line.substring(line.indexOf("=") + 1));

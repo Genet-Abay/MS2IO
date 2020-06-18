@@ -64,7 +64,7 @@ public class MspReader extends SpectraReader {
     @Override
     public ArrayList<Spectrum> readAll() {
 
-        ArrayList<Spectrum> spectra = new ArrayList<>(100000);
+        ArrayList<Spectrum> spectra = new ArrayList<>();
         try {
 
             //BufferedReader br = new BufferedReader(new FileReader(this.spectraFile));
@@ -136,19 +136,21 @@ public class MspReader extends SpectraReader {
                     spec.setModification(mods);                  
                     
                     for (int b = 0; b < tempLen; b++) {
-                        if (temp[b].startsWith("Parent")) {
-                            double precmass = Double.parseDouble(temp[b].substring(temp[b].indexOf("=") + 1));
+                        if (temp[b].startsWith("Parent=")) {
+                            int indx=temp[b].indexOf("=") + 1;
+                            double precmass = Double.parseDouble(temp[b].substring(indx));
                             spec.setPCMass(precmass);
-                        } else if (temp[b].startsWith("Scan")) {
-                            String scan = temp[b].substring(temp[b].indexOf("=") + 1);
+                        } else if (temp[b].startsWith("Scan=")) {
+                            int indx=temp[b].indexOf("=") + 1;
+                            String scan = temp[b].substring(indx);
                             spec.setScanNumber(scan);
-                        } else if (temp[b].startsWith("Protein")) {
-                            String prot = temp[b].substring(temp[b].indexOf("=" + 1));
+                        } else if (temp[b].startsWith("Protein=")) {
+                            
+                            int indx=temp[b].indexOf("=") +1;                            
+                            String prot = temp[b].substring(indx);
                             spec.setProtein(prot);
-                        } else if (temp[b].startsWith("Scan")) {
-                            String scan = temp[b].substring(temp[b].indexOf("=") + 1);
-                            spec.setScanNumber(scan);
-                        }
+                            
+                        } 
                     }
 
                 }
@@ -257,16 +259,17 @@ public class MspReader extends SpectraReader {
                         if (temp[b].startsWith("Parent=")) {
                             double precmass = Double.parseDouble(temp[b].substring(temp[b].indexOf("=") + 1));
                             spec.setPCMass(precmass);
-                            break;
+                            
 
                         }
-//                        else if (temp[b].startsWith("Protein=")) {
-//                            String prot = temp[b].substring(temp[b].indexOf("=") + 1);
-//                            spec.setProtein(prot);
-//                        } else if (temp[b].startsWith("Scan")) {
-//                            String scan = temp[b].substring(temp[b].indexOf("=") + 1);
-//                            spec.setScanNumber(scan);
-//                        }
+                        else if (temp[b].startsWith("Protein=")) {
+                            int indx=temp[b].indexOf("=") +1;                            
+                            String prot = temp[b].substring(indx);
+                            spec.setProtein(prot);
+                        } else if (temp[b].startsWith("Scan=")) {
+                            String scan = temp[b].substring(temp[b].indexOf("=") + 1);
+                            spec.setScanNumber(scan);
+                        }
                     }
 
                 }

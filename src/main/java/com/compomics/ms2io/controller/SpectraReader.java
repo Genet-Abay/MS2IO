@@ -116,7 +116,7 @@ public abstract class SpectraReader {
     protected List<Modification> getModifications(String comment, String sequence) {
 
         List<Modification> modifications = new ArrayList<>();
-        Modification my_mod;
+        Modification my_mod=new Modification();
 
         String[] coms = comment.split(" ");
         for (String s : coms) {
@@ -139,22 +139,22 @@ public abstract class SpectraReader {
                         if (!"".equals(strAr[p])) {
                             strAr[p] = strAr[p].replaceAll("\\s", ""); //remove all white space
                             String[] m = strAr[p].split(",");
-                            
-                            
-                            mod_site = Integer.parseInt(m[0]);
-                            
-                            if(m.length < 3 || mod_site >= sequence.length()){
-                               break;
-                            }                          
-                            
-                            aa = Character.toString(sequence.charAt(mod_site));
-                            
-                            if(!isNumeric(m[2])){
-                                my_mod = new Modification(mod_site, m[2], aa);
-                            }else{
-                                 my_mod = new Modification(mod_site, Double.parseDouble(m[2]), aa);
+                            int mLen = m.length;
+
+                            if (mLen < 3 || mod_site >= sequence.length()) {
+                                break;
                             }
-                          
+
+                            mod_site = Integer.parseInt(m[0]);
+                            aa = Character.toString(sequence.charAt(mod_site));
+                            if (mLen == 3) {
+                                if (!isNumeric(m[2])) {
+                                    my_mod = new Modification(mod_site,aa, m[2]);
+                                } else {
+                                    my_mod = new Modification(mod_site, aa, Double.parseDouble(m[2]));
+                                }
+                            }
+
                             modifications.add(my_mod);
                         }
                     }

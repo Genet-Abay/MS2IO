@@ -15,11 +15,13 @@
  */
 package com.compomics.ms2io.model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Genet
  */
-public class Charge {
+public class Charge implements Serializable {
     
     /**
      * value of the charge

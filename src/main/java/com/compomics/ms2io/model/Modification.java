@@ -15,29 +15,37 @@
  */
 package com.compomics.ms2io.model;
 import com.compomics.ms2io.util.Modification_Mass;
+import java.io.Serializable;
 /**
  *
  * @author Genet
  */
 
-public class Modification {
+public class Modification implements Serializable{
     
-    private final int position;
+    private int position;
     private final String mode_name;
     private final String aaSymbol;
     private final double massShift;
     
-    public Modification(int pos, String name, String aaSymbol){
-        this.aaSymbol = aaSymbol;
+    public Modification()
+    {
+        this.aaSymbol = "";
+        this.mode_name="";
+        this.position=0;        
+        this.massShift=0;
+    }
+    
+    public Modification(int pos, String aa, String name){
+        this.aaSymbol = aa;
         this.mode_name=name;
-        this.position=pos;
-        
+        this.position=pos;        
         this.massShift= Modification_Mass.getMassShift(name);
         
     }
     
-    public Modification(int pos, double massShift, String aaSymbol){
-        this.aaSymbol = aaSymbol;
+    public Modification(int pos, String aa, double massShift){
+        this.aaSymbol = aa;
         this.position=pos;
         this.massShift=massShift;
         this.mode_name="";        
@@ -49,6 +57,14 @@ public class Modification {
      */
     public int getModificationPosition(){
         return position;
+    }
+    
+       /**
+     * sets the modification site
+     * @return 
+     */
+    public void setModificationPosition(int newPos){
+        this.position = newPos;
     }
     
     /**
@@ -84,9 +100,11 @@ public class Modification {
         mod.append(",");
         mod.append(this.aaSymbol);
         mod.append(",");
-        mod.append(this.mode_name);
-    
-        
+        if(this.mode_name!="")
+            mod.append(this.mode_name);
+        else if(this.massShift>0)
+            mod.append(Double.toString(this.massShift));
+            
         return mod.toString();
     }
     
