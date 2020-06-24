@@ -134,18 +134,16 @@ public abstract class SpectraReader {
 
                     //List l = new ArrayList<String>();
                     for (int p = 1; p < num_mods + 1; p++) {
-                        mod_site = 0;
 
                         if (!"".equals(strAr[p])) {
                             strAr[p] = strAr[p].replaceAll("\\s", ""); //remove all white space
                             String[] m = strAr[p].split(",");
                             int mLen = m.length;
 
+                            mod_site = Integer.parseInt(m[0]);
                             if (mLen < 3 || mod_site >= sequence.length()) {
                                 break;
-                            }
-
-                            mod_site = Integer.parseInt(m[0]);
+                            }                            
                             aa = Character.toString(sequence.charAt(mod_site));
                             if (mLen == 3) {
                                 if (!isNumeric(m[2])) {
