@@ -42,6 +42,7 @@
     </dependencies>
     
     
+    
     <repositories>
         <repository>
             <id>pst-release</id>
@@ -64,17 +65,20 @@
     </repositories>
     
     
-    <build>                
+    <build>      
+             
        <plugins>
-            <!--By default test is skipped for deployment -->            
+            <!--By default test is skipped for deployment -->    
+              <!--By default test is skipped for deployment -->            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.12.4</version>
                 <configuration>
-                    <!--<skipTests>true</skipTests> -->
+                    <skipTests>true</skipTests>
                 </configuration>
-            </plugin>
+            </plugin>        
+         
         </plugins>
     </build>
  
@@ -90,13 +94,19 @@
     
     <!-- a remote repository for the deploy, UGent genesis repository-->
     <distributionManagement>
-        <repository>
+<!--        <repository>
             <id>archiva.compomics_maven_2</id>
             <name>Internal Release Repository</name>
             <url>http://genesis.ugent.be/archiva/repository/compomics_maven_2</url>
-            <!--<url>http://genesis.ugent.be/archiva/repository/compomics_maven_2</url>-->
-        </repository>
+            <url>http://genesis.ugent.be/archiva/repository/compomics_maven_2</url>
+        </repository>-->
         
+        
+        <repository>
+            <id>archiva.compomics_maven_2</id>
+            <name>Internal Release Repository</name>
+            <url>http://genesis.ugent.be/maven2</url>
+        </repository>
     </distributionManagement>
     
 </project>
