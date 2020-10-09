@@ -27,6 +27,7 @@ public class Modification implements Serializable{
     private final String mode_name;
     private final String aaSymbol;
     private final double massShift;
+    private final String UNIMODE_id;
     
     public Modification()
     {
@@ -34,6 +35,7 @@ public class Modification implements Serializable{
         this.mode_name="";
         this.position=0;        
         this.massShift=0;
+        this.UNIMODE_id = "";
     }
     
     public Modification(int pos, String aa, String name){
@@ -41,6 +43,7 @@ public class Modification implements Serializable{
         this.mode_name=name;
         this.position=pos;        
         this.massShift= Modification_Mass.getMassShift(name);
+        this.UNIMODE_id="";
         
     }
     
@@ -48,7 +51,24 @@ public class Modification implements Serializable{
         this.aaSymbol = aa;
         this.position=pos;
         this.massShift=massShift;
-        this.mode_name="";        
+        this.mode_name="";     
+        this.UNIMODE_id="";
+    }
+    
+    public Modification(int pos, String aa, double massShift, String unimodeId){
+        this.aaSymbol = aa;
+        this.position=pos;
+        this.massShift=massShift;
+        this.mode_name="";     
+        this.UNIMODE_id=unimodeId;
+    }
+    
+       public Modification(int pos, String aa, String name, String unimodeId){
+        this.aaSymbol = aa;
+        this.position=pos;
+        this.massShift=0;
+        this.mode_name="";     
+        this.UNIMODE_id=unimodeId;
     }
     
     /**
@@ -90,6 +110,16 @@ public class Modification implements Serializable{
     public String getModifiedAA(){
         return aaSymbol;
     }
+    
+    /**
+     * returns the UNIMODE identifier for this specific modification
+     * @return 
+     */
+    public String getUnimodeId(){
+        return this.UNIMODE_id;
+    }
+    
+
     
        /**
      * get modification as string

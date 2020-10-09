@@ -1,6 +1,7 @@
 package com.compomics.ms2io.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  *
  * @author Genet
  */
-public class Spectrum implements Serializable {
+public class Spectrum implements Comparable<Spectrum>, Serializable {
 
     /**
      * Index of this spectrum
@@ -562,5 +563,13 @@ public class Spectrum implements Serializable {
      */
     public IndexKey getIndex() {
         return this.indx;
+    }
+
+    @Override
+    public int compareTo(Spectrum t) {
+        BigDecimal bd1=BigDecimal.valueOf(this.pcMass);
+        BigDecimal bd2=BigDecimal.valueOf(t.pcMass);       
+        
+        return bd1.compareTo(bd2);
     }
 }
