@@ -174,6 +174,23 @@ public class Spectrum implements Comparable<Spectrum>, Serializable {
         }
         return strb.toString();
     }
+    
+    /**
+     * return list of modification for this spectrum
+     *
+     * @return
+     */
+    public String getModifications_juststr() {
+        
+        String modstr="0";
+        if(!this.modifications.isEmpty()){
+            modstr=this.modifications.get(0).getModification_str();
+        }
+        if(modstr.isEmpty()){
+            modstr="0";
+        }
+        return modstr;
+    }
 
     /**
      * Returns Title

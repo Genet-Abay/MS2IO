@@ -125,7 +125,7 @@ public abstract class SpectraReader {
                 if (!"0".equals(mod)) {
 
                     int mod_site;
-                    String aa;
+                    char aa;
                     String mod_name;
                     double mass_shift;
 
@@ -144,7 +144,7 @@ public abstract class SpectraReader {
                             if (mLen < 3 || mod_site >= sequence.length()) {
                                 break;
                             }                            
-                            aa = Character.toString(sequence.charAt(mod_site));
+                            aa = sequence.charAt(mod_site);
                             if (mLen == 3) {
                                 if (!isNumeric(m[2])) {
                                     my_mod = new Modification(mod_site,aa, m[2]);
